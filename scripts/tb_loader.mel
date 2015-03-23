@@ -1,0 +1,92 @@
+//////////////////////////////////////////////////////
+/////////// all the tools loader  ////////////////////
+//////////    taste the rainbow   ////////////////////
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+global proc string tb_scriptPath(string $cmd)
+{
+string $dirs, $tool, $mel_lib;
+string $mel_libs[],$tools_to_load[], $allFolders[];
+string $each;
+string $buffer[];
+int $i;
+string  $directory;
+	string $filePath = `whatIs $cmd`;
+	print "---------\n";
+	print ("\n" + $filePath +"\n");
+	$filePath = `substitute "Mel procedure found in: " $filePath ""`;
+	$filePath = `substituteAllString $filePath "\\" "/"`;
+	print ("main filepath "+ $filePath);
+	tokenize $filePath "/" $buffer;
+	print (`size($buffer)`);
+	for ($i=0; $i<(`size($buffer)`-1); $i++) 
+	{
+	    $directory = $directory + $buffer[$i] +  "/";
+	}
+	print ("\n Dir :: "+ $directory +"\n");
+	return $directory;
+}
+
+global proc tb_loader()
+{
+
+string $folders, $tool, $mel_lib;
+string $mel_libs[],$tools_to_load[], $tools_not_to_load[], $allFolders[],$initList[];
+
+	string $filePath = `tb_scriptPath("tb_loader")`;
+	print ("\n"+$filePath+"\n");
+	$filePath = `substituteAllString $filePath "\\" "/"`;
+	print ("file path " + $filePath + "\n");
+	//look through the script folder for sub folders
+	$allFolders  = `getFileList -folder $filePath -filespec "*."`;
+
+	print ("all folders\n");
+	print $allFolders;
+	
+	for ($folders in $allFolders)
+	{
+		$mel_libs = `getFileList -folder ($filePath +"/"+ $folders +"\\") -filespec "*.mel"`;
+    
+		for ($mel_lib in $mel_libs)
+		{
+			if (`gmatch $mel_lib "tb_lib_*"`)
+            {
+                $tools_to_load[`size( $tools_to_load ) `] = $filePath + $folders +   "/" + $mel_lib;
+				$initList[`size( $initList ) `] = `substitute ".mel" $mel_lib ""`;
+				
+            }  else
+			$tools_not_to_load[`size( $tools_not_to_load ) `] = $filePath + $folders +   "/" + $mel_lib;
+		}
+	}
+	// I can't remember why this is here, but there was a bug at some point and this was needed when maya loaded...
+	buildDeferredMenus();
+	
+	print ("found tools\n");
+	print $tools_to_load;
+	
+    for ($tool in $tools_to_load)
+    {
+        eval("source \"" + $tool + "\"");
+    }
+	for ($tool in $initList)
+	{
+		eval($tool);
+	}
+}
+
+
+
+global proc LoadLocalScripts(string $path, string $scripts[])
+{
+	//this script will load an array of .mel file names (second argument) from a folder (first argument)
+	string $localPath = `tb_scriptPath($path)`;
+	string $scr;
+	for ($scr in $scripts)
+	{
+		eval("source \""+ $localPath+ $scr+ "\"");
+	}
+}
+
+
+tb_loader;

@@ -1,3 +1,10 @@
+'''
+timeDragger 1.0			
+29/03/2015
+Tom Bailey				
+
+'''
+
 import maya.cmds as cmds
 import maya.mel as mel
 

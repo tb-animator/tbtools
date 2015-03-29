@@ -24,9 +24,12 @@ def drag(str):
     if str == "on" :
         mel.eval('storeLastAction( "restoreLastContext " + `currentCtx` )')
         cmds.timeControl(aPlayBackSliderPython,edit = True, snap = False )
+        cmds.displayPref( displayGradient=False )
         cmds.setToolTo ('TimeDragger')
     elif str == "off":
         #theTime = int(cmds.currentTime( query=True ) )
         cmds.timeControl(aPlayBackSliderPython,edit = True, snap = True )
         cmds.currentTime ( int ( cmds.currentTime(query=True) ) , edit=True )
+        cmds.displayPref( displayGradient=True )
         mel.eval('invokeLastAction')
+

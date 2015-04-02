@@ -11,25 +11,22 @@ import maya.mel as mel
 '''
     #hotkey pressed
     import timeDragger as td
-    reload(td)
-    td.drag("on")
+    td.drag(True)
     #hotkey released
     import timeDragger as td
-    reload(td)
-    td.drag("off")
+    td.drag(False)
 '''
 
-def drag(str):
+def drag(state):
     aPlayBackSliderPython = mel.eval('$tmpVar=$gPlayBackSlider')
-    if str == "on" :
-        mel.eval('storeLastAction( "restoreLastContext " + `currentCtx` )')
-        cmds.timeControl(aPlayBackSliderPython,edit = True, snap = False )
-        cmds.displayPref( displayGradient=False )
-        cmds.setToolTo ('TimeDragger')
-    elif str == "off":
-        #theTime = int(cmds.currentTime( query=True ) )
-        cmds.timeControl(aPlayBackSliderPython,edit = True, snap = True )
-        cmds.currentTime ( int ( cmds.currentTime(query=True) ) , edit=True )
-        cmds.displayPref( displayGradient=True )
+    if state:
+        mel.eval('storeLastAction("restoreLastContext " + `currentCtx`)')
+        cmds.timeControl(aPlayBackSliderPython, edit=True, snap=False )
+        cmds.displayPref(displayGradient=False)
+        cmds.setToolTo('TimeDragger')
+    else:
+        #theTime = int(cmds.currentTime(query=True))
+        cmds.timeControl(aPlayBackSliderPython, edit=True, snap=True)
+        cmds.currentTime(int(cmds.currentTime(query=True)), edit=True)
+        cmds.displayPref(displayGradient=True)
         mel.eval('invokeLastAction')
-

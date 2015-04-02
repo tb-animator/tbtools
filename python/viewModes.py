@@ -1,12 +1,12 @@
 import maya.cmds as cmds
 
 def viewModes(data):
-"""viewModes("joints") to view joints only
-viewModes("meshes") to view meshes only
-viewModes("") to view everything
-"""
+    """viewModes("joints") to view joints only
+    viewModes("meshes") to view meshes only
+    viewModes("") to view everything
+    """
     ver = cmds.about(version=True)
-    grease = if ver in {'2014': True, '2015': True}
+    grease = ver in {'2014': True, '2015': True}
     panel = cmds.getPanel(underPointer=True) or cmds.getPanel(withFocus=True)
 
     if cmds.getPanel(typeOf=panel) == "modelPanel":

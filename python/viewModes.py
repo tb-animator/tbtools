@@ -1,40 +1,31 @@
 import maya.cmds as cmds
 
-def viewModes(str):
-    '''
-    viewModes("joints") to view joints only
-	viewModes("meshes") to view meshes only
-	viewModes("") to view everything
-    '''
-    
-    
+def viewModes(data):
+    """viewModes("joints") to view joints only
+    viewModes("meshes") to view meshes only
+    viewModes("") to view everything
+    """
     ver = cmds.about(version=True)
-    grease = False
-    if ver == "2015" or ver == "2014":
-       grease=True
-
-    panel = cmds.getPanel(underPointer=True)
-    if not panel:
-        panel = cmds.getPanel(withFocus=True)
+    grease = ver in {'2014': True, '2015': True}
+    panel = cmds.getPanel(underPointer=True) or cmds.getPanel(withFocus=True)
 
     if cmds.getPanel(typeOf=panel) == "modelPanel":
-        if str == "joints" :
-            cmds.modelEditor(panel,edit=True,
-                             polymeshes=False,
-                             joints=True,
-                             nurbsCurves=True,
-                             pluginShapes=True,
-                             locators=True)
-            if grease: cmds.modelEditor(panel,edit=True,greasePencils=False)
-        elif str == "meshes":
-            cmds.modelEditor(panel,edit=True, 
-                             polymeshes=True,
-                             strokes=True,
-                             joints=False,
-                             nurbsCurves=False,
-                             pluginShapes=False,
-                             locators=False)
-            if grease: cmds.modelEditor(panel,edit=True,greasePencils=True)
+        if data == "joints":
+        	state = True
+        elif data == "meshes":
+        	state = False
         else:
-            cmds.modelEditor(panel,edit=True, allObjects=True)
-            if grease: cmds.modelEditor(panel,edit=True,greasePencils=True)
+            cmds.modelEditor(panel, edit=True, allObjects=True)
+            return
+
+        cmds.modelEditor(panel, edit=True, 
+                         polymeshes=not state,
+                         strokes=not state,
+                         joints=state,
+                         nurbsCurves=state,
+                         pluginShapes=state,
+                         locators=state)
+        if grease: 
+            cmds.modelEditor(panel, edit=True, greasePencils=True)
+            
+

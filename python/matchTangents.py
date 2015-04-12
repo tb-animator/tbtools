@@ -15,7 +15,6 @@ def match(data):
     e = mc.playbackOptions(query=True, max=state, min=not state)
     animcurves = mc.keyframe(query=True, name=True)
     tangent = []
-    print animcurves
     if animcurves and len(animcurves):
         for curve in animcurves:
             tangent = [mc.keyTangent(curve, query=True, time=(s, s), outAngle=state, inAngle=not state)[0],

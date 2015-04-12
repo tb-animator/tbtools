@@ -10,13 +10,7 @@ match('end')
 
 
 def match(data):
-    if data == "start":
-        state = True
-    elif data == "end":
-        state = False
-    else:
-        state = False
-    print state
+    state = data in {'start': True, 'end': False}
     s = mc.playbackOptions(query=True, min=state, max=not state)
     e = mc.playbackOptions(query=True, max=state, min=not state)
     animcurves = mc.keyframe(query=True, name=True)

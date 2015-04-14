@@ -1,13 +1,10 @@
 # Python code
-import math
 import maya.cmds as mc
-import maya.OpenMaya as om
 
 '''
 match('start')
 match('end')
 '''
-
 
 def match(data):
     state = data in {'start': True, 'end': False}
@@ -23,5 +20,3 @@ def match(data):
                           outAngle=tangent[state], inAngle=tangent[not state])
     else:
         print "no anim curves found"
-
-

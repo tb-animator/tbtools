@@ -1,23 +1,23 @@
-+ PLATFORM:win64 MAYAVERSION:2015 tbtools 1.0 C:\Users\userName\Documents\maya\tbtools
-ANIMATORTOOLS_CONFIG_PATH+:=shelves
-PYTHONPATH+:=python
++ PLATFORM:win64 MAYAVERSION:2015 tbtools C:\Users\userName\Documents\maya\tbtools
+PYTHONPATH+:=apps
+PYTHONPATH+:=lib
 MAYA_SCRIPT_PATH+:=scripts
 XBMLANGPATH+:=Icons
 
-+ PLATFORM:win64 MAYAVERSION:2014 tbtools 1.0 C:\Users\userName\Documents\maya\tbtools
-ANIMATORTOOLS_CONFIG_PATH+:=shelves
-PYTHONPATH+:=python
++ PLATFORM:win64 MAYAVERSION:2014 tbtools C:\Users\userName\Documents\maya\tbtools
+PYTHONPATH+:=apps
+PYTHONPATH+:=lib
 MAYA_SCRIPT_PATH+:=scripts
 XBMLANGPATH+:=Icons
 
-+ PLATFORM:win64 MAYAVERSION:2013 tbtools 1.0 C:\Users\userName\Documents\maya\tbtools
-ANIMATORTOOLS_CONFIG_PATH+:=shelves
-PYTHONPATH+:=python
++ PLATFORM:win64 MAYAVERSION:2013 tbtools C:\Users\userName\Documents\maya\tbtools
+PYTHONPATH+:=apps
+PYTHONPATH+:=lib
 MAYA_SCRIPT_PATH+:=scripts
 XBMLANGPATH+:=Icons
 
-+ PLATFORM:win64 MAYAVERSION:2012 tbtools 1.0 C:\Users\userName\Documents\maya\tbtools
-ANIMATORTOOLS_CONFIG_PATH+:=shelves
-PYTHONPATH+:=python
++ PLATFORM:win64 MAYAVERSION:2012 tbtools C:\Users\userName\Documents\maya\tbtools
+PYTHONPATH+:=apps
+PYTHONPATH+:=lib
 MAYA_SCRIPT_PATH+:=scripts
 XBMLANGPATH+:=Icons

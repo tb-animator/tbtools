@@ -89,5 +89,24 @@ def add_tbtools_commands():
     _commands.append(
         ['View_Objects_All', '', _category, 'python', 'import viewMode as vm\nreload (vm)\nvm.viewMode(\"allObj\")\n'])
 
+
+    _category = 'tbtools_manipulators'
+    _commands.append(['cycle_rotate', 'cycle the rotation mode', _category, 'python',
+                      'from tb_manipulators import manips\nmmanips.cycleRotation()'])
+    _commands.append(['cycle_translate', 'cycle the translation mode', _category, 'python',
+                      'from tb_manipulators import manips\nmmanips.cycleTranslation()'])
+    _commands.append(
+        ['cycle_selection_mask', 'toggle between selecting controls/joints and all objects', _category, 'python',
+         'from tb_manipulators import manips\nmmanips.cycle_selection_mask()'])
+    _commands.append(
+        ['cycle_key_type', 'cycle between key types, types are set in the options window', _category, 'python',
+         'from tb_manipulators import manips\nmmanips.cycle_key_type()'])
+
+    _commands.append(['smooth_drag_on', 'timeslider tool with no frame snapping', _category, 'python',
+                      'import timeDragger as td\nreload (td)\ntd.drag(True)'])
+    _commands.append(
+        ['smooth_drag_off', 'set this as the release command for whatever you set \'smooth_drag_on\' to', _category,
+         'python', 'import timeDragger as td\nreload (td)\ntd.drag(False)'])
+
     for _command in _commands:
         add_command(_command[0], _command[1], _command[2], _command[3], _command[4])

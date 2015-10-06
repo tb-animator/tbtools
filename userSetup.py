@@ -3,6 +3,6 @@
 # Note: Below path is just an example, and of course, you can put the Ritalin script files in any other folder you see fit. 
 # In any way you need to change the following path according to the actual folder you copied the files to.
 print "****************************************************************"
-print "\t\ttb-tools UserSetup.py LOADING\n"
+print "\t\ttb-tools module loading\n"
 print "****************************************************************"
 

@@ -57,7 +57,7 @@ def add_tbtools_commands():
     _mel = 'mel'
     _commands = []
 
-    _category = 'tb_tools_keyframing'
+    _category = 'tbtools_keyframing'
     _commands.append(['graphEditor_frame', 'smart framing of keys', _category, 'python',
                       'import animation.apps.graphEditor.NT_graphEditor as ge\nreload(ge)\nge.graphEditor().smart_frame()'])
 

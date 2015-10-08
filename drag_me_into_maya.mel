@@ -1,0 +1,15 @@
+global proc module_installer()
+{
+	string $filePath = `whatIs module_installer`;
+	$filePath = `substitute "Mel procedure found in: " $filePath ""`;
+	$filePath = `substitute "drag_me_into_maya.mel" $filePath  ""`;
+	
+	print ($filePath + "\n");
+	string $exec_cmd = "execfile (\""+ $filePath + "\install.py\")";
+	
+	print ($exec_cmd + "\n");
+	python($exec_cmd);
+	
+}
+
+module_installer;

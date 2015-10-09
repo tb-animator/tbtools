@@ -49,8 +49,8 @@ def add_command(_name, _annotation, _category, _language, _command):
 
 def add_tbtools_commands():
     ## command to add all hotkey commands to the hotkey editor
-    # import tb_hotKeys as tb_hotKeys
-    # tb_hotKeys.add_tbtools_commands()
+    # import tb_keyCommands as keyCmds
+    # keyCmds.add_tbtools_commands()
     #
     _category = 'tb_tools'
     _py = 'python'
@@ -58,54 +58,54 @@ def add_tbtools_commands():
     _commands = []
 
     _category = 'tbtools_keyframing'
-    _commands.append(['graphEditor_frame', 'smart framing of keys', _category, 'python',
-                      'import graphEditor as ge\nreload(ge)\nge.graphEditor().smart_frame()'])
+    _commands.append(['smart_frame_curves', 'smart framing of keys', _category, 'python',
+                      'import tb_graphEditor as ge\nreload(ge)\nge.graphEditor().smart_frame()'])
 
     # match start to end
-    _commands.append(['match_start_to_end', '', _category, 'python',
+    _commands.append(['match_tangent_start_to_end', '', _category, 'python',
                       'import key_mod as ky\nreload(ky)\nky.keyTools().match(\"start\")'])
     # match end to start
-    _commands.append(['match_end_to_start', '', _category, 'python',
+    _commands.append(['match_tangent_end_to_start', '', _category, 'python',
                       'import key_mod as ky\nreload(ky)\nky.keyTools().match(\"end\")'])
 
     _category = 'tbtools_cameras'
 
     _commands.append(
-        ['tracker_track', 'creates/rebuilds a tracking camera to track your current selection', _category, 'python',
+        ['tracking_camera_track', 'creates/rebuilds a tracking camera to track your current selection', _category, 'python',
          'import trackingCam as tc\nreload (tc)\ntc.track(\"tracker\")'])
     _commands.append(
-        ['tracker_update', 'updates the object tracked by the tracking camera, switches view', _category, 'python',
+        ['tracking_camera_update', 'updates the object tracked by the tracking camera, switches view', _category, 'python',
          'import trackingCam as tc\nreload (tc)\ntc.track(\"newTarget\",\"tracker\")'])
     _commands.append(
-        ['tracker_persp', 'swaps the view to the perspective camera, matching your current view', _category, 'python',
+        ['tracking_camera_persp', 'swaps the view to the perspective camera, matching your current view', _category, 'python',
          'import trackingCam as tc\nreload (tc)\ntc.track(\"persp\")'])
 
     _category = 'tbtools_view'
 
     _commands.append(
-        ['View_Objects_Joints', '', _category, 'python', 'import viewMode as vm\nreload (vm)\nvm.viewMode(\"joints\")'])
+        ['ViewMode_Objects_Joints', '', _category, 'python', 'import viewMode as vm\nreload (vm)\nvm.viewMode(\"joints\")'])
     _commands.append(
-        ['View_Objects_Meshes', '', _category, 'python', 'import viewMode as vm\nreload (vm)\nvm.viewMode(\"meshes\")'])
+        ['ViewMode_Objects_Meshes', '', _category, 'python', 'import viewMode as vm\nreload (vm)\nvm.viewMode(\"meshes\")'])
     _commands.append(
-        ['View_Objects_All', '', _category, 'python', 'import viewMode as vm\nreload (vm)\nvm.viewMode(\"allObj\")\n'])
+        ['ViewMode_Objects_All', '', _category, 'python', 'import viewMode as vm\nreload (vm)\nvm.viewMode(\"allObj\")\n'])
 
 
     _category = 'tbtools_manipulators'
-    _commands.append(['cycle_rotate', 'cycle the rotation mode', _category, 'python',
+    _commands.append(['cycle_rotation', 'cycle the rotation mode', _category, 'python',
                       'from tb_manipulators import manips\nmmanips.cycleRotation()'])
-    _commands.append(['cycle_translate', 'cycle the translation mode', _category, 'python',
+    _commands.append(['cycle_translation', 'cycle the translation mode', _category, 'python',
                       'from tb_manipulators import manips\nmmanips.cycleTranslation()'])
     _commands.append(
-        ['cycle_selection_mask', 'toggle between selecting controls/joints and all objects', _category, 'python',
+        ['cycle_object_selection_mask', 'toggle between selecting controls/joints and all objects', _category, 'python',
          'from tb_manipulators import manips\nmmanips.cycle_selection_mask()'])
     _commands.append(
-        ['cycle_key_type', 'cycle between key types, types are set in the options window', _category, 'python',
+        ['cycle_set_keyframe_type', 'cycle between key types, types are set in the options window', _category, 'python',
          'from tb_manipulators import manips\nmmanips.cycle_key_type()'])
 
-    _commands.append(['smooth_drag_on', 'timeslider tool with no frame snapping', _category, 'python',
+    _commands.append(['smooth_drag_timeline_on', 'timeslider tool with no frame snapping', _category, 'python',
                       'import timeDragger as td\nreload (td)\ntd.drag(True)'])
     _commands.append(
-        ['smooth_drag_off', 'set this as the release command for whatever you set \'smooth_drag_on\' to', _category,
+        ['smooth_drag_timeline_off', 'set this as the release command for whatever you set \'smooth_drag_on\' to', _category,
          'python', 'import timeDragger as td\nreload (td)\ntd.drag(False)'])
 
     for _command in _commands:

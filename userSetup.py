@@ -6,5 +6,5 @@ print "****************************************************************"
 print "\t\ttb-tools module loading\n"
 print "****************************************************************"
 
-import tb_hotKeys as tb_hotKeys
-tb_hotKeys.add_tbtools_commands()
+import tb_keyCommands as keyCmds
+keyCmds.add_tbtools_commands()

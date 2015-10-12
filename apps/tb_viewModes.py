@@ -11,9 +11,9 @@ def viewModes(data):
 
     if cmds.getPanel(typeOf=panel) == "modelPanel":
         if data == "joints":
-        	state = True
+            state = True
         elif data == "meshes":
-        	state = False
+            state = False
         else:
             cmds.modelEditor(panel, edit=True, allObjects=True)
             return

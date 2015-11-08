@@ -10,10 +10,10 @@ import maya.mel as mel
 
 '''
     #hotkey pressed
-    import timeDragger as td
+    import tb_timeDragger as td
     td.drag(True)
     #hotkey released
-    import timeDragger as td
+    import tb_timeDragger as td
     td.drag(False)
 '''
 

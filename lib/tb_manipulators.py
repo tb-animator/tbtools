@@ -31,146 +31,135 @@
 *******************************************************************************
 '''
 
-
+import pymel.core as pm
 import maya.cmds as cmds
+# from tb_optionVars import optionVar_utils
+import tb_optionVars as tb_optionVars
+import tb_messages as message
+
+reload(message)
+reload(tb_optionVars)
+
 
 class manips():
     def __init__(self):
+        # translation
+        self.translate_modes = ['Object', 'Local', 'World', 'Normal',
+                                'RotationAxis', 'LiveAxis', 'CustomAxis']
+        self.translate_optionVar = "tb_cycle_translation"
+        self.translate_messageVar = "tb_cycle_translation_msg_pos"
+        self.translate_messageLabel = "message position"
+
+        # rotation
+        self.rotate_modes = ['Local', 'World', 'Gimbal']
+        self.rotate_optionVar = "tb_cycle_rotation"
+        self.rotate_messageVar = "tb_cycle_rotation_msg_pos"
+        self.rotate_messageLabel = "message position"
+
+        # selection mask
+        self.selection_modes = ['Controls', 'All']
+        self.selection_optionVar = "tb_cycle_selection"
+        self.rotate_messageVar = "tb_cycle_selection_msg_pos"
+
+        # key types
+        self.key_modes = ["spline", "linear", "clamped", "step", "flat", "plateau", "auto"]
+        self.key_optionVar = "tb_cycle_keytype"
+        self.key_messageVar = "tb_cycle_keytype_msg_pos"
+        self.key_messageLabel = "message position"
+
+        if not pm.optionVar(exists='tb_cycle_translation'):
+            pm.optionVar(stringValueAppend=(self.translate_optionVar, 'World'))
         pass
 
-    @staticmethod
-    def cycleRotation():
+    def set_optionVars(self):
+        if not pm.optionVar(exists=self.translate_optionVar):
+            pass
+
+    def cycleRotation(self):
         '''
         cycleRotation()
         '''
+        # get the name of the move type
         cmds.RotateTool()
-        display_message = ''
         rotateMode = cmds.manipRotateContext('Rotate', query=True, mode=True)
-        if rotateMode == 0:
-            display_message = 'world'
-            cmds.manipRotateContext('Rotate', edit=True, mode=1)
-        elif rotateMode == 1:
-            display_message = 'gimbal'
-            cmds.manipRotateContext('Rotate', edit=True, mode=2)
-        elif rotateMode == 2:
-            display_message = 'local'
-            cmds.manipRotateContext('Rotate', edit=True, mode=0)
-        else:
-            # cmds.headsUpMessage("Local")
-            cmds.manipRotateContext('Rotate', edit=True, mode=0)
-        cmds.inViewMessage(amg='rotate <hl>%s</hl>' % display_message,
-                           pos='midCenter',
-                           fadeStayTime=0.5,
-                           fadeOutTime=2.0,
-                           fade=True)
+        new_mode, new_name = tb_optionVars.optionVar_utils.cycleOption(option_name=self.rotate_optionVar,
+                                                                       full_list=self.rotate_modes,
+                                                                       current=rotateMode,
+                                                                       default='Local'
+                                                                       )
 
-    @staticmethod
-    def cycleTranslation():
+        pm.manipRotateContext('Rotate', edit=True, mode=new_mode)
+        if pm.optionVar.get(self.rotate_optionVar + "_msg", 0):
+            message.info(prefix='rotate',
+                         message=' : %s' % new_name,
+                         position=pm.optionVar.get(self.rotate_messageVar, 'midCenter')
+                         )
+
+    def cycleTranslation(self):
+        """
+        Translate mode:
+        0 - Object Space
+        1 - Local Space
+        2 - World Space (default)
+        3 - Move Along Vertex Normal
+        4 - Move Along Rotation Axis
+        5 - Move Along Live Object Axis
+        6 - Custom Axis Orientation
+        """
         cmds.MoveTool()
         move_mode = cmds.manipMoveContext('Move', query=True, mode=True)
-        if move_mode == 4:
-            display_message = 'World'
-            _mode = 2
-        elif move_mode == 2:
-            display_message = 'Local'
-            _mode = 1
-        elif move_mode == 1:
-            display_message = 'Object'
-            _mode = 4
-        else:
-            display_message = 'World'
-            _mode = 2
-        cmds.manipMoveContext('Move', edit=True, mode=_mode)
-        cmds.inViewMessage(amg='translate <hl>%s</hl>' % display_message,
-                           pos='midCenter',
-                           fadeStayTime=0.5,
-                           fadeOutTime=2.0,
-                           fade=True)
+        print
+        "current,", move_mode
+        # get the name of the move type
+        new_mode, new_name = tb_optionVars.optionVar_utils.cycleOption(option_name=self.translate_optionVar,
+                                                                       full_list=self.translate_modes,
+                                                                       current=move_mode,
+                                                                       default='World'
+                                                                       )
 
-    @staticmethod
-    def cycle_selection_mask():
-        _mode = cmds.selectType(query=True, polymesh=True)
-        display_message = ['all', 'controls']
-        print _mode
+        pm.manipMoveContext('Move', edit=True, mode=new_mode)
+        if pm.optionVar.get(self.translate_optionVar + "_msg", 0):
+            message.info(prefix='translate',
+                         message=' : %s' % new_name,
+                         position=pm.optionVar.get(self.translate_messageVar, 'midCenter')
+                         )
 
-        cmds.selectType(allObjects=not _mode)
+    # this cycle tool doesn't bother with options yet, just toggles between 2 states
+    def cycle_selection_mask(self):
+        _mode = pm.selectType(query=True, polymesh=True)
+
+        pm.selectType(allObjects=not _mode)
+
         if _mode:
             cmds.selectType(joint=_mode, nurbsCurve=_mode)
-        cmds.selectMode(object=True)
-        cmds.inViewMessage(amg='masking <hl>%s</hl>' % display_message[_mode],
-                           pos='midCenter',
-                           fadeStayTime=0.5,
-                           fadeOutTime=2.0,
-                           fade=True)
+        pm.selectMode(object=True)
 
-    @staticmethod
-    def cycle_key_type():
-        _key_types = []
+        message.info(prefix='masking',
+                     message=' : %s' % self.selection_modes[_mode],
+                     position=pm.optionVar.get(self.translate_messageVar, 'midCenter')
+                     )
 
-        if cmds.optionVar(query='NT_tan_spline'):
-            _key_types.append("spline")
-        if cmds.optionVar(query='NT_tan_linear'):
-            _key_types.append("linear")
-        if cmds.optionVar(query='NT_tan_clamped'):
-            _key_types.append("clamped")
-        if cmds.optionVar(query='NT_tan_stepped'):
-            _key_types.append("step")
-        if cmds.optionVar(query='NT_tan_flat'):
-            _key_types.append("flat")
-        if cmds.optionVar(query='NT_tan_plateau'):
-            _key_types.append("plateau")
-        if cmds.optionVar(query='NT_tan_auto'):
-            _key_types.append("auto")
-        print _key_types
-        _current_key_type = cmds.keyTangent(g=True, query=True, outTangentType=True)
-        print _current_key_type
-        if _current_key_type[0] in _key_types:
-            _current_key_index = _key_types.index(_current_key_type[0])
-        else:
-            print _current_key_type, 'not in list'
-            _current_key_index = 0
+    def cycle_key_type(self):
+        _current_key_type = pm.keyTangent(g=True, query=True, outTangentType=True)[0]
+        print "current", str(_current_key_type)
+        print self.key_modes
+        print self.key_modes.index(_current_key_type)
 
-        if _current_key_index >= len(_key_types) - 1:
-            _current_key_index = 0
+        new_mode, new_name = tb_optionVars.optionVar_utils.cycleOption(option_name=self.key_optionVar,
+                                                                       full_list=self.key_modes,
+                                                                       current=self.key_modes.index(_current_key_type),
+                                                                       default='spline'
+                                                                       )
+        print "new", new_mode, "name", new_name
+        if new_name == "step":
+            _in = 'spline'
         else:
-            _current_key_index += 1
-        _new_key_type = _key_types[_current_key_index]
-        print "hello im the key type", _new_key_type
-        if _new_key_type == "spline":
-            _in = "spline"
-            _out = "spline"
-            display_message = 'spline tangents'
-        elif _new_key_type == "auto":
-            _in = "auto"
-            _out = "auto"
-            display_message = 'auto tangents'
-        elif _new_key_type == "step":
-            _in = "spline"
-            _out = "step"
-            display_message = 'step tangents'
-        elif _new_key_type == "clamped":
-            _in = "clamped"
-            _out = "clamped"
-            display_message = 'clamped tangents'
-        elif _new_key_type == "linear":
-            _in = "linear"
-            _out = "linear"
-            display_message = 'step tangents'
-        elif _new_key_type == "plateau":
-            _in = "plateau"
-            _out = "plateau"
-            display_message = 'plateau tangents'
-        elif _new_key_type == "flat":
-            _in = "flat"
-            _out = "flat"
-            display_message = 'flat tangents'
-        else:
-            _in = "spline"
-            _out = "spline"
-            display_message = 'default spline tangents'
+            _in = new_name
+        _out = new_name
+
+        display_message = 'default spline tangents'
         cmds.keyTangent(g=True, edit=True, inTangentType=_in, outTangentType=_out)
-        cmds.inViewMessage(amg='key type <hl>%s</hl>' % _current_key_type[0],
-                           pos='midCenter',
-                           fadeStayTime=0.5,
-                           fadeOutTime=2.0,
-                           fade=True)
+        message.info(prefix='key type',
+                     message=' : %s' % _out,
+                     position=pm.optionVar.get(self.key_messageVar, 'midCenter')
+                     )

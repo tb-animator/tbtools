@@ -92,7 +92,7 @@ class manips():
         if pm.optionVar.get(self.rotate_optionVar + "_msg", 0):
             message.info(prefix='rotate',
                          message=' : %s' % new_name,
-                         position=pm.optionVar.get(self.rotate_messageVar, 'midCenter')
+                         position=pm.optionVar.get(self.rotate_messageVar, 'topLeft')
                          )
 
     def cycleTranslation(self):
@@ -108,8 +108,6 @@ class manips():
         """
         cmds.MoveTool()
         move_mode = cmds.manipMoveContext('Move', query=True, mode=True)
-        print
-        "current,", move_mode
         # get the name of the move type
         new_mode, new_name = tb_optionVars.optionVar_utils.cycleOption(option_name=self.translate_optionVar,
                                                                        full_list=self.translate_modes,
@@ -121,7 +119,7 @@ class manips():
         if pm.optionVar.get(self.translate_optionVar + "_msg", 0):
             message.info(prefix='translate',
                          message=' : %s' % new_name,
-                         position=pm.optionVar.get(self.translate_messageVar, 'midCenter')
+                         position=pm.optionVar.get(self.translate_messageVar, 'topLeft')
                          )
 
     # this cycle tool doesn't bother with options yet, just toggles between 2 states
@@ -141,16 +139,12 @@ class manips():
 
     def cycle_key_type(self):
         _current_key_type = pm.keyTangent(g=True, query=True, outTangentType=True)[0]
-        print "current", str(_current_key_type)
-        print self.key_modes
-        print self.key_modes.index(_current_key_type)
 
         new_mode, new_name = tb_optionVars.optionVar_utils.cycleOption(option_name=self.key_optionVar,
                                                                        full_list=self.key_modes,
                                                                        current=self.key_modes.index(_current_key_type),
                                                                        default='spline'
                                                                        )
-        print "new", new_mode, "name", new_name
         if new_name == "step":
             _in = 'spline'
         else:
@@ -161,5 +155,5 @@ class manips():
         cmds.keyTangent(g=True, edit=True, inTangentType=_in, outTangentType=_out)
         message.info(prefix='key type',
                      message=' : %s' % _out,
-                     position=pm.optionVar.get(self.key_messageVar, 'midCenter')
+                     position=pm.optionVar.get(self.key_messageVar, 'topLeft')
                      )

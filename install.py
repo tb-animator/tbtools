@@ -3,6 +3,7 @@ import os, stat
 import sys
 import inspect
 import io
+import shutil
 
 class module_maker():
     def __init__(self):
@@ -12,12 +13,13 @@ class module_maker():
                         }
         self.win_versions = ['win32', 'win64'][pm.about(is64=True)]
         self.maya_version = pm.about(version=True)
-        self.filepath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))  # script directory
+        self.filepath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))) +"\\"  # script directory
         self.python_paths = ['apps', 'lib', '']
         self.maya_script_paths = ['scripts']
         self.xbmlang_paths = ['Icons']
         self.out_lines = []
         self.module_file = 'tbtools.mod'
+        self.module_template = os.path.join(self.filepath, self.module_file)
         self.maya_module_dir = pm.internalVar(userAppDir=True) + "modules\\"
         if not os.path.isdir(self.maya_module_dir):
             print "making maya module folder"
@@ -46,13 +48,31 @@ class module_maker():
 
     def write_module_file(self):
         self.make_module_data()
-        file = self.maya_module_dir + "\\" + self.module_file
+        mod_file = self.maya_module_dir + "\\" + self.module_file
+        shutil.copyfile(self.module_template, mod_file)
+
         if os.access(os.path.join(self.maya_module_dir, self.module_file), os.W_OK):
+            self.replace_path(mod_file, 'C:\\Users\\userName\\Documents\\maya\\tbtools\\' , self.filepath)
+            return True
+            '''
             with io.open(file, 'w') as f:
                 f.writelines(line + u'\n' for line in self.out_lines)
                 return True
+            '''
         else:
             return False
+
+    def replace_path(self, fileName, path, newpath):
+        f = open(fileName,'r')
+        filedata = f.read()
+        f.close()
+
+        newdata = filedata.replace(path, newpath)
+
+        f = open(fileName,'w')
+        f.write(newdata)
+        f.close()
+
 
     def check_module_file(self):
         full_path = os.path.join(self.maya_module_dir, self.module_file)

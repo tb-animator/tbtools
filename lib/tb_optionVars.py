@@ -43,4 +43,33 @@ class optionVar_utils():
         print name, index
         return index, name
 
-# size, type, dimensions = getImageData(x)
+
+def set_default_values():
+    if pm.optionVar.get('tb_firstRun', True):
+        from tb_manipulators import manips
+        print "setting up default option vars for first run"
+
+        pm.optionVar(intValue=(manips().translate_optionVar+"_msg", 1))
+        pm.optionVar(stringValue=(manips().translate_messageVar+"_msg", 'topLeft'))
+
+        pm.optionVar(intValue=(manips().rotate_optionVar+"_msg", 1))
+        pm.optionVar(stringValue=(manips().rotate_messageVar+"_msg", 'topLeft'))
+
+        pm.optionVar(intValue=(manips().key_optionVar+"_msg", 1))
+        pm.optionVar(stringValue=(manips().key_messageVar+"_msg", 'topLeft'))
+
+        default_moves = ['Object', 'Local', 'World']
+        pm.optionVar.pop(manips().translate_optionVar)
+        for modes in default_moves:
+            pm.optionVar(stringValueAppend=(manips().translate_optionVar, modes))
+
+        default_rotations = ['Local', 'World', 'Gimbal']
+        pm.optionVar.pop(manips().rotate_optionVar)
+        for modes in default_rotations:
+            pm.optionVar(stringValueAppend=(manips().rotate_optionVar, modes))
+
+        default_keys = ['spline', 'linear', 'step']
+        pm.optionVar.pop(manips().key_optionVar)
+        for modes in default_keys:
+            pm.optionVar(stringValueAppend=(manips().key_optionVar, modes))
+    return True

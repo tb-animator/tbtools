@@ -36,8 +36,6 @@ class folder_picker():
                         )
 
         if top_control:
-            print
-            "attaching to control", top_control
             pm.formLayout(
                 top_form,
                 edit=True,
@@ -137,13 +135,16 @@ class checkBox_group():
         pass
 
     class cBox():
-        def _optionCheckBox_single(self, name="", label="", annotation="", variable=""):
+        def _optionCheckBox_single(self, name="", label="", annotation="", variable="", defaultValue=False):
+            print name, pm.optionVar.get(variable)
             _checkBox = pm.checkBox(name, label=label,
-                                    value=pm.optionVar.get(variable, 0),
+                                    value=pm.optionVar.get(variable, defaultValue),
                                     annotation=annotation,
                                     align="right",
                                     changeCommand=lambda *args: self.checkBox_pressed(name, args[0])
                                     )
+            # hacky way to save the value of the checkbox back to the option var
+            pm.optionVar(intValue=(variable, pm.optionVar.get(variable, defaultValue)))
             return _checkBox
 
         @staticmethod
@@ -166,8 +167,6 @@ class checkBox_group():
 
         @staticmethod
         def checkBox_pressed_array(variable, name, state):
-            print
-            name, state
             vars = pm.optionVar.get(variable, [''])
             if state:
                 # checkbox ticked, add option to list
@@ -198,9 +197,10 @@ class checkBox_group():
                                          parent=cLayout
                                          )
         for options in optionList:
-            print
-            "option", options
-            self.cBox()._optionCheckBox(variable=variable, name=options, label=options)
+            self.cBox()._optionCheckBox(variable=variable,
+                                        name=options,
+                                        label=options)
+
         # spacer
         pm.text(label="", parent=cLayout)
 
@@ -209,15 +209,15 @@ class checkBox_group():
             pm.setParent(cLayout)
             pm.rowColumnLayout(numberOfColumns=2, columnOffset=(2, "right", 20))
             pm.text(label="inView message")
-            self.cBox()._optionCheckBox_single(variable=variable + "_msg", name=variable + "_msg")
+            self.cBox()._optionCheckBox_single(variable=variable + "_msg",
+                                               name=variable + "_msg",
+                                               defaultValue=True)
 
             if positionMenu:
                 pm.text(label=positionLabel)
                 positionWidget().create(name=positionMenu)
 
         if top_control:
-            print
-            "attaching to control", top_control
             pm.formLayout(
                 top_form,
                 edit=True,

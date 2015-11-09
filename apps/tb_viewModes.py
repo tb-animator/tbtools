@@ -1,6 +1,6 @@
 import maya.cmds as cmds
 
-def viewModes(data):
+def viewMode(data):
     """viewModes("joints") to view joints only
     viewModes("meshes") to view meshes only
     viewModes("") to view everything

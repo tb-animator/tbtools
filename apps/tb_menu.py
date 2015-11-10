@@ -28,5 +28,5 @@ def open_options(*args):
     reload(tbo)
     tbo.anim_optionWindow().showUI()
 
-def open_anim_page():
+def open_anim_page(*args):
     webbrowser.open('http://tb-animator.blogspot.co.uk/')

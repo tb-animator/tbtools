@@ -29,11 +29,11 @@ class module_maker():
 
     def make_module_path(self):
         module_path = '+ PLATFORM:' \
-               + self.win_versions \
-               + ' MAYAVERSION:' \
-               + self.maya_version \
-               + ' tbtools 1.0 ' \
-               + self.filepath + '\\'
+                      + self.win_versions \
+                      + ' MAYAVERSION:' \
+                      + self.maya_version \
+                      + ' tbtools 1.0 ' \
+                      + self.filepath + '\\'
         return module_path
 
     def make_module_data(self):
@@ -76,6 +76,7 @@ class module_maker():
 
     def check_module_file(self):
         full_path = os.path.join(self.maya_module_dir, self.module_file)
+        print full_path
         if os.path.isfile(os.path.join(self.maya_module_dir, self.module_file)):
             os.chmod(full_path, stat.S_IWRITE)
             return True
@@ -91,12 +92,31 @@ class module_maker():
             result_message += "module file created <span style=\""+self.colours['green']+ "\">Successfully</span> \n"
             result_message += "module file location <span style=\""+self.colours['yellow']+ "\">" \
                               + os.path.join(self.maya_module_dir, self.module_file) + "</span>\n\nEnjoy!"
+            self.result_window()
         else:
             result_message += "<span style=\""+self.colours['red']+"<h3>WARNING</h3></span> :module file not created\n"
+
+        message_state = pm.optionVar.get("inViewMessageEnable", 1)
+        pm.optionVar(intValue=("inViewMessageEnable", 1))
         pm.inViewMessage(amg=result_message,
-                 pos='midCenter',
-                 dragKill=True,
-                 fadeOutTime=2.0,
-                 fade=True)
+                         pos='botRight',
+                         dragKill=True,
+                         fadeOutTime=2.0,
+                         fade=True)
+        pm.optionVar(intValue=("inViewMessageEnable", message_state))
+
+
+    def result_window(self):
+        if pm.window("installWin", exists=True):
+            pm.deleteUI("installWin")
+        window = pm.window( title="success!")
+        layout = pm.columnLayout(adjustableColumn=True )
+        pm.text(font="boldLabelFont",label="tbtools installed")
+        pm.text(label="")
+        pm.text(label="please restart maya for everything to load")
+
+        pm.button( label='Close', command=('cmds.deleteUI(\"' + window + '\", window=True)') , parent=layout)
+        pm.setParent( '..' )
+        pm.showWindow( window )
 
 module_maker().install()

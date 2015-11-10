@@ -72,4 +72,6 @@ def set_default_values():
         pm.optionVar.pop(manips().key_optionVar)
         for modes in default_keys:
             pm.optionVar(stringValueAppend=(manips().key_optionVar, modes))
-    return True
+        return True
+    else:
+        return False

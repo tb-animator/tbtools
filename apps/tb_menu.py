@@ -3,6 +3,7 @@ import maya.mel as mel
 import pymel.core as pm
 import webbrowser
 
+
 class main_menu():
     def __init__(self):
         self.main_parent = ""
@@ -17,6 +18,7 @@ class main_menu():
         self.main_menu = pm.menu("TB_tools", label="TB_tools", tearOff=True)
 
         pm.menuItem(label="options",command=open_options, parent=self.main_menu)
+        pm.menuItem(label="download updates (experimental)",command=download_updates, parent=self.main_menu)
         pm.menuItem(label="online help", command=open_anim_page, parent=self.main_menu)
 
 def make_ui():
@@ -30,3 +32,9 @@ def open_options(*args):
 
 def open_anim_page(*args):
     webbrowser.open('http://tb-animator.blogspot.co.uk/')
+
+def download_updates(*args):
+    from lib import updater as updater
+
+    reload(updater)
+    updater.updater().download_project_files()

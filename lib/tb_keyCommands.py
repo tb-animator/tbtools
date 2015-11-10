@@ -52,15 +52,15 @@ def make_command_list():
     # camera tools
     cat = 'tbtools_cameras'
     command_list.append(tb_hkey(name='tracking_camera_track', annotation='creates/rebuilds a tracking camera to track your current selection',
-                                category=cat, command = [ 'import trackingCam as tc',
+                                category=cat, command = [ 'import tb_trackingCam as tc',
                                                          'reload (tc)',
                                                          'tc.track(\"tracker\")']) )
     command_list.append(tb_hkey(name='tracking_camera_update', annotation='updates the object tracked by the tracking camera, switches view',
-                                category=cat, command = [ 'import trackingCam as tc',
+                                category=cat, command = [ 'import tb_trackingCam as tc',
                                                          'reload (tc)',
                                                          'tc.track(\"newTarget\",\"tracker\")']) )
     command_list.append(tb_hkey(name='tracking_camera_persp', annotation='swaps the view to the perspective camera, matching your current view',
-                                category=cat, command = [ 'import trackingCam as tc',
+                                category=cat, command = [ 'import tb_trackingCam as tc',
                                                          'reload (tc)',
                                                          'tc.track(\"persp\")']) )
 
@@ -98,11 +98,11 @@ def make_command_list():
                                                          'reload (tbm)',
                                                          'tbm.manips().cycle_key_type()']) )
     command_list.append(tb_hkey(name='smooth_drag_timeline_on', annotation='timeslider tool with no frame snapping',
-                                category=cat, command = [ 'import timeDragger as td',
+                                category=cat, command = [ 'import tb_timeDragger as td',
                                                          'reload (td)',
                                                          'td.drag(True)']) )
     command_list.append(tb_hkey(name='smooth_drag_timeline_off', annotation='timeslider tool with no frame snapping',
-                                category=cat, command = [ 'import timeDragger as td',
+                                category=cat, command = [ 'import tb_timeDragger as td',
                                                          'reload (td)',
                                                          'td.drag(False)']) )
     return command_list

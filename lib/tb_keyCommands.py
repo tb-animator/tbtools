@@ -58,7 +58,7 @@ def make_command_list():
     command_list.append(tb_hkey(name='tracking_camera_update', annotation='updates the object tracked by the tracking camera, switches view',
                                 category=cat, command = [ 'import tb_trackingCam as tc',
                                                          'reload (tc)',
-                                                         'tc.track(\"newTarget\",\"tracker\")']) )
+                                                         'tc.track(\"retarget\",\"tracker\")']) )
     command_list.append(tb_hkey(name='tracking_camera_persp', annotation='swaps the view to the perspective camera, matching your current view',
                                 category=cat, command = [ 'import tb_trackingCam as tc',
                                                          'reload (tc)',
@@ -219,4 +219,4 @@ class hotkey_cleanup():
         # pm.button( label='Delete all', parent=layout)
         pm.button( label='Close', command=('cmds.deleteUI(\"' + window + '\", window=True)') , parent=layout)
         pm.setParent( '..' )
-        pm.showWindow( window )
+        pm.showWindow(window)

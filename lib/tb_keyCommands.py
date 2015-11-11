@@ -30,92 +30,106 @@ import pymel.core as pm
 
 from tb_hkey import tb_hkey
 
-def make_command_list():
 
+def make_command_list():
     command_list = []
 
     # keyframing tools
     cat = 'tbtools_keyframing'
     command_list.append(tb_hkey(name='smart_frame_curves', annotation='smart framing of keys',
-                                category=cat, command = [ 'import tb_graphEditor as ge',
-                                                         'reload(ge)',
-                                                         'ge.graphEditor().open_graph_editor()' ]) )
+                                category=cat, command=['import tb_graphEditor as ge',
+                                                       'reload(ge)',
+                                                       'ge.graphEditor().open_graph_editor()']))
 
     command_list.append(tb_hkey(name='match_tangent_start_to_end', annotation='',
-                                category=cat, command = [ 'import key_mod as ky',
-                                                         'reload(ky)',
-                                                         'ky.keyTools().match(\"start\")']) )
+                                category=cat, command=['import key_mod as ky',
+                                                       'reload(ky)',
+                                                       'ky.keyTools().match(\"start\")']))
     command_list.append(tb_hkey(name='match_tangent_end_to_start', annotation='',
-                                category=cat, command = [ 'import key_mod as ky',
-                                                         'reload(ky)',
-                                                         'ky.keyTools().match(\"end\")']) )
+                                category=cat, command=['import key_mod as ky',
+                                                       'reload(ky)',
+                                                       'ky.keyTools().match(\"end\")']))
 
     # camera tools
     cat = 'tbtools_cameras'
-    command_list.append(tb_hkey(name='tracking_camera_track', annotation='creates/rebuilds a tracking camera to track your current selection',
-                                category=cat, command = [ 'import tb_trackingCam as tc',
-                                                         'reload (tc)',
-                                                         'tc.track(\"tracker\")']) )
-    command_list.append(tb_hkey(name='tracking_camera_update', annotation='updates the object tracked by the tracking camera, switches view',
-                                category=cat, command = [ 'import tb_trackingCam as tc',
-                                                         'reload (tc)',
-                                                         'tc.track(\"retarget\",\"tracker\")']) )
-    command_list.append(tb_hkey(name='tracking_camera_persp', annotation='swaps the view to the perspective camera, matching your current view',
-                                category=cat, command = [ 'import tb_trackingCam as tc',
-                                                         'reload (tc)',
-                                                         'tc.track(\"persp\")']) )
+    command_list.append(tb_hkey(name='tracking_camera_track',
+                                annotation='creates/rebuilds a tracking camera to track your current selection',
+                                category=cat, command=['import tb_trackingCam as tc',
+                                                       'reload (tc)',
+                                                       'tc.track(\"tracker\")']))
+    command_list.append(tb_hkey(name='tracking_camera_update',
+                                annotation='updates the object tracked by the tracking camera, switches view',
+                                category=cat, command=['import tb_trackingCam as tc',
+                                                       'reload (tc)',
+                                                       'tc.track(\"retarget\",\"tracker\")']))
+    command_list.append(tb_hkey(name='tracking_camera_persp',
+                                annotation='swaps the view to the perspective camera, matching your current view',
+                                category=cat, command=['import tb_trackingCam as tc',
+                                                       'reload (tc)',
+                                                       'tc.track(\"persp\")']))
 
     # viewport tools
     cat = 'tbtools_view'
     command_list.append(tb_hkey(name='ViewMode_Objects_Joints', annotation='',
-                                category=cat, command = [ 'import tb_viewModes as vm',
-                                                         'reload (vm)',
-                                                         'vm.viewMode(\"joints\")']) )
+                                category=cat, command=['import tb_viewModes as vm',
+                                                       'reload (vm)',
+                                                       'vm.viewMode(\"joints\")']))
     command_list.append(tb_hkey(name='ViewMode_Objects_Meshes', annotation='',
-                                category=cat, command = [ 'import tb_viewModes as vm',
-                                                         'reload (vm)',
-                                                         'vm.viewMode(\"meshes\")']) )
+                                category=cat, command=['import tb_viewModes as vm',
+                                                       'reload (vm)',
+                                                       'vm.viewMode(\"meshes\")']))
     command_list.append(tb_hkey(name='ViewMode_Objects_All', annotation='',
-                                category=cat, command = [ 'import tb_viewModes as vm',
-                                                         'reload (vm)',
-                                                         'vm.viewMode(\"allObj\")']) )
+                                category=cat, command=['import tb_viewModes as vm',
+                                                       'reload (vm)',
+                                                       'vm.viewMode(\"allObj\")']))
     command_list.append(tb_hkey(name='toggle_isolate_selection', annotation='',
-                                category=cat, command = [ 'import tb_isolator as tbi',
-                                                         'reload(tbi)',
-                                                         'tbi.isolator().toggle_isolate()']) )
+                                category=cat, command=['import tb_isolator as tbi',
+                                                       'reload(tbi)',
+                                                       'tbi.isolator().toggle_isolate()']))
 
     # manipulator tools
     cat = 'tbtools_manipulators'
     command_list.append(tb_hkey(name='cycle_rotation', annotation='cycle the rotation mode',
-                                category=cat, command = [ 'import tb_manipulators as tbm',
-                                                         'reload (tbm)',
-                                                         'tbm.manips().cycleRotation()']) )
+                                category=cat, command=['import tb_manipulators as tbm',
+                                                       'reload (tbm)',
+                                                       'tbm.manips().cycleRotation()']))
     command_list.append(tb_hkey(name='cycle_translation', annotation='cycle the translation mode',
-                                category=cat, command = [ 'import tb_manipulators as tbm',
-                                                         'reload (tbm)',
-                                                         'tbm.manips().cycleTranslation()']) )
+                                category=cat, command=['import tb_manipulators as tbm',
+                                                       'reload (tbm)',
+                                                       'tbm.manips().cycleTranslation()']))
     command_list.append(tb_hkey(name='cycle_object_selection_mask', annotation='cycle the selection mask',
-                                category=cat, command = [ 'import tb_manipulators as tbm',
-                                                         'reload (tbm)',
-                                                         'tbm.manips().cycle_selection_mask()']) )
+                                category=cat, command=['import tb_manipulators as tbm',
+                                                       'reload (tbm)',
+                                                       'tbm.manips().cycle_selection_mask()']))
     command_list.append(tb_hkey(name='cycle_set_keyframe_type', annotation='cycle the setkey type',
-                                category=cat, command = [ 'import tb_manipulators as tbm',
-                                                         'reload (tbm)',
-                                                         'tbm.manips().cycle_key_type()']) )
+                                category=cat, command=['import tb_manipulators as tbm',
+                                                       'reload (tbm)',
+                                                       'tbm.manips().cycle_key_type()']))
     command_list.append(tb_hkey(name='smooth_drag_timeline_on', annotation='timeslider tool with no frame snapping',
-                                category=cat, command = [ 'import tb_timeDragger as td',
-                                                         'reload (td)',
-                                                         'td.drag(True)']) )
-    command_list.append(tb_hkey(name='smooth_drag_timeline_off', annotation='timeslider tool with no frame snapping',
-                                category=cat, command = [ 'import tb_timeDragger as td',
-                                                         'reload (td)',
-                                                         'td.drag(False)']) )
+                                category=cat, command=['import tb_timeDragger as td',
+                                                       'reload (td)',
+                                                       'td.drag(True)']))
+    command_list.append(
+        tb_hkey(name='smooth_drag_timeline_off', annotation='set to same hotkey as ON, but tick release',
+                category=cat, command=['import tb_timeDragger as td',
+                                       'reload (td)',
+                                       'td.drag(False)']))
+    cat = 'tbtools_selection'
+    command_list.append(tb_hkey(name='select_character_set_objs', annotation='',
+                                category=cat, command=['import tb_selections as tb_sel',
+                                                       'reload (tb_sel)',
+                                                       'tb_sel.select_cheracter_set()']))
     return command_list
 
 
 class hotkey_tool():
     def __init__(self):
-        self.categories = [ "tb_tools", 'tbtools_view', 'tbtools_keyframing', 'tbtools_cameras', 'tbtools_manipulators' ]
+        self.categories = ["tb_tools",
+                           'tbtools_view',
+                           'tbtools_keyframing',
+                           'tbtools_cameras',
+                           'tbtools_manipulators',
+                           'tbtools_selection']
         self.command_list = make_command_list()
         self.name_list = self.get_command_names()
         self.tb_commands = self.get_existing_commands()
@@ -126,7 +140,7 @@ class hotkey_tool():
     def update_commands(self):
         for commands in self.command_list:
             self.add_command(commands)
-            
+
     def add_command(self, hkey=tb_hkey()):
         if not pm.runTimeCommand(hkey.name, exists=True):
             pm.runTimeCommand(hkey.name)
@@ -168,7 +182,7 @@ class hotkey_tool():
             if com not in self.name_list:
                 if com not in self.extra_commands:
                     commands_for_deletion.append(com)
-                
+
         if commands_for_deletion:
             hotkey_cleanup(commands_to_delete=commands_for_deletion)
 
@@ -177,10 +191,8 @@ class hotkey_tool():
         for cmd in self.command_list:
             names.append(cmd.name)
         return names
-        
 
 
-    
 class hotkey_cleanup():
     def __init__(self, commands_to_delete=[]):
         self.command_list = commands_to_delete
@@ -190,23 +202,23 @@ class hotkey_cleanup():
     def remove_hotkey(self, command_name, layout_name):
         pm.runTimeCommand(command_name, edit=True, delete=True)
         pm.deleteUI(layout_name)
-    
+
     def ignore_hotkey(self, command_name, layout_name):
         pm.optionVar(stringValueAppend=('tb_extra_commands', command_name))
-        pm.rowLayout(layout_name, edit=True, bgc=(0.2,0.6,0.2))
-        
+        pm.rowLayout(layout_name, edit=True, bgc=(0.2, 0.6, 0.2))
+
     def command_widget(self, command_name="", parent=""):
         rLayout = pm.rowLayout(numberOfColumns=4, adjustableColumn=2, parent=parent)
         pm.text(label="command:", parent=rLayout)
         pm.text(label=str(command_name), parent=rLayout)
 
-        pm.button(label="keep", parent=rLayout, command=lambda *args : self.ignore_hotkey(command_name, rLayout))
-        pm.button(label="delete", parent=rLayout, command=lambda *args : self.remove_hotkey(command_name, rLayout))
+        pm.button(label="keep", parent=rLayout, command=lambda *args: self.ignore_hotkey(command_name, rLayout))
+        pm.button(label="delete", parent=rLayout, command=lambda *args: self.remove_hotkey(command_name, rLayout))
 
     def showUI(self):
-        window = pm.window( title="hotkey check!")
-        layout = pm.columnLayout(adjustableColumn=True )
-        pm.text(font="boldLabelFont",label="Uknown or outdated commands")
+        window = pm.window(title="hotkey check!")
+        layout = pm.columnLayout(adjustableColumn=True)
+        pm.text(font="boldLabelFont", label="Uknown or outdated commands")
         pm.text(label="")
 
         pm.text(label="your own commands saved in tbtools categories")
@@ -217,11 +229,11 @@ class hotkey_cleanup():
         pm.text(label="If you didn't make it and it's here it means it")
         pm.text(label="is an old or outdated hotkey and should be removed")
         pm.text(label="")
-                
+
         for items in self.command_list:
             self.command_widget(command_name=items, parent=layout)
 
         # pm.button( label='Delete all', parent=layout)
-        pm.button( label='Close', command=('cmds.deleteUI(\"' + window + '\", window=True)') , parent=layout)
-        pm.setParent( '..' )
+        pm.button(label='Close', command=('cmds.deleteUI(\"' + window + '\", window=True)'), parent=layout)
+        pm.setParent('..')
         pm.showWindow(window)

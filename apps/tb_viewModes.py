@@ -1,4 +1,6 @@
 import maya.cmds as cmds
+import tb_messages as message
+
 
 def viewMode(data):
     """viewModes("joints") to view joints only
@@ -12,9 +14,13 @@ def viewMode(data):
     if cmds.getPanel(typeOf=panel) == "modelPanel":
         if data == "joints":
             state = True
+            msg = "controls"
         elif data == "meshes":
             state = False
+            msg = "meshes"
         else:
+            msg = "controls and meshes"
+            message.info(prefix='view', message=' : %s' % msg, position='topLeft')
             cmds.modelEditor(panel, edit=True, allObjects=True)
             return
 
@@ -27,5 +33,7 @@ def viewMode(data):
                          locators=state)
         if grease: 
             cmds.modelEditor(panel, edit=True, greasePencils=True)
+
+        message.info(prefix='view', message=' : %s' % msg, position='topLeft', fadeStayTime=3.0, fadeOutTime=3.0)
             
 

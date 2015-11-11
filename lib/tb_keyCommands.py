@@ -78,6 +78,10 @@ def make_command_list():
                                 category=cat, command = [ 'import tb_viewModes as vm',
                                                          'reload (vm)',
                                                          'vm.viewMode(\"allObj\")']) )
+    command_list.append(tb_hkey(name='toggle_isolate_selection', annotation='',
+                                category=cat, command = [ 'import tb_isolator as tbi',
+                                                         'reload(tbi)',
+                                                         'tbi.isolator().toggle_isolate()']) )
 
     # manipulator tools
     cat = 'tbtools_manipulators'

@@ -160,9 +160,10 @@ class hotkey_tool():
 
     def remove_unneeded_ignore_entries(self):
         needed_ignore_names = []
-        for items in self.extra_commands:
-            if items in self.tb_commands:
-                needed_ignore_names.append(items)
+        if self.extra_commands and self.tb_commands:
+            for items in self.extra_commands:
+                if items in self.tb_commands:
+                    needed_ignore_names.append(items)
 
         pm.optionVar.pop('tb_extra_commands')
         for items in needed_ignore_names:
@@ -173,12 +174,13 @@ class hotkey_tool():
         _commands = []
         existing_commands = pm.runTimeCommand(query=True, userCommandArray=True)
 
-        # loop through existing commands
-        for com in existing_commands:
-            # filter out non tbtools commands
-            if pm.runTimeCommand(com, query=True, category=True) in self.categories:
-                _commands.append(com)
-        return _commands
+        if existing_commands:
+            # loop through existing commands
+            for com in existing_commands:
+                # filter out non tbtools commands
+                if pm.runTimeCommand(com, query=True, category=True) in self.categories:
+                    _commands.append(com)
+            return _commands
 
 
     def remove_bad_commands(self):

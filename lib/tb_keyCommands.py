@@ -119,6 +119,11 @@ def make_command_list():
                                 category=cat, command=['import tb_selections as tb_sel',
                                                        'reload (tb_sel)',
                                                        'tb_sel.select_cheracter_set()']))
+    command_list.append(tb_hkey(name='select_quick_select_set_objs', annotation='',
+                                category=cat, command=['import tb_selections as tb_sel',
+                                                       'reload (tb_sel)',
+                                                       'tb_sel.quick_selection().qs_select()']))
+
     return command_list
 
 

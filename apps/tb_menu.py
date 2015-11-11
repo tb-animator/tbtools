@@ -19,6 +19,7 @@ class main_menu():
 
         pm.menuItem(label="options",command=open_options, parent=self.main_menu)
         pm.menuItem(label="download updates (experimental)",command=download_updates, parent=self.main_menu)
+        pm.menuItem(label="about", command=show_aboutWin, parent=self.main_menu)
         pm.menuItem(label="online help", command=open_anim_page, parent=self.main_menu)
 
 def make_ui():
@@ -34,7 +35,24 @@ def open_anim_page(*args):
     webbrowser.open('http://tb-animator.blogspot.co.uk/')
 
 def download_updates(*args):
-    from lib import updater as updater
+    import updater as upd
+    reload(upd)
+    upd.updaterWindow().showUI()
 
-    reload(updater)
-    updater.updater().download_project_files()
+def show_aboutWin(*args):
+    about_win().showUI()
+
+
+class about_win():
+    def __init__(self):
+        self.version = pm.optionVar.get('tb_version', 1.0 )
+
+    def showUI(self):
+        if pm.window("aboutWindow", exists=True):
+            pm.deleteUI("aboutWindow")
+        window = pm.window("aboutWindow", title="About")
+        layout = pm.columnLayout(adjustableColumn=True )
+        pm.text(font="boldLabelFont",label="Version : %s" % self.version)
+
+        pm.button( label='Close', command=('cmds.deleteUI(\"' + window + '\", window=True)') , parent=layout)
+        pm.showWindow(window)

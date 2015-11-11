@@ -83,38 +83,72 @@ class updater():
             print "no fileName"
         
             
-    def download_project_files(self):
+    def download_project_files(self, win, *args):
         files = self.project_info.scripts
         print "downloading module to ", self.base_dir
+
         for fileName in files:
             # print self.base_dir, fileName
             local_dir = '%s\%s' % (self.base_dir,fileName)
             url = self.create_url(fileName)
-            # print "local", local_dir, "url", url
+
+            # increment progress bar
+            win.step_bar()
+            # set current downloading label
+            win.set_label(fileName)
+
             try:
                 self.copy_from_url(url, local_dir)
             except:
                 print "skipping", url
+        win.finish_bar()
+        pm.optionVar(floatValue=('tb_version', self.project_info.version) )
+
 
 class updaterWindow():
     def __init__(self):
         self.project_data = updater().project_info
 
+    def set_label(self, text=""):
+        pm.text(self.file_text, edit=True, label=text)
+
+    def step_bar(self,):
+        pm.progressBar(self.progress_bar, edit=True, step=1)
+
+    def finish_bar(self):
+        max_value = pm.progressBar(self.progress_bar, query=True, maxValue=True)
+        pm.progressBar(self.progress_bar, edit=True, maxValue=max_value)
+        pm.text(self.file_text, edit=True, label="Complete")
+
     def showUI(self):
-        window = pm.window( title="tb tools update")
+        if pm.window("update", exists=True):
+            pm.deleteUI("update")
+        window = pm.window("update", title="tb tools update")
         layout = pm.columnLayout(adjustableColumn=True )
         pm.text(font="boldLabelFont",label="There's a new version")
         pm.text(label=self.project_data.version)
         pm.text(label="release notes")
-        pm.scrollField( editable=True, wordWrap=False, text=self.project_data.relaseNotes )
+        pm.scrollField( editable=True, wordWrap=True, text=self.project_data.relaseNotes )
         '''
         for items in self.command_list:
             self.command_widget(command_name=items, parent=layout)
         '''
+        self.file_text = pm.text(label="")
+        self.progress_bar = pm.progressBar(maxValue=len(self.project_data.scripts)-1)
 
         # pm.button( label='Delete all', parent=layout)
-        pm.button( label='Update', command=updater().download_project_files , parent=layout)
+        pm.button( label='Update',
+                   command=lambda *args : updater().download_project_files(self),
+                   parent=layout)
         pm.button( label='Ignore this version', command=('cmds.deleteUI(\"' + window + '\", window=True)') , parent=layout)
         pm.button( label='Close', command=('cmds.deleteUI(\"' + window + '\", window=True)') , parent=layout)
+
+
+
         pm.setParent( '..' )
         pm.showWindow(window)
+
+
+
+
+

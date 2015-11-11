@@ -1,5 +1,7 @@
 import maya.cmds as cmds
+import pymel.core as pm
 import tb_messages as message
+from tb_objectInfo import mod_panel
 
 
 def viewMode(data):
@@ -7,9 +9,13 @@ def viewMode(data):
     viewModes("meshes") to view meshes only
     viewModes("") to view everything
     """
+    # should organise these nicer
+    show_message = pm.optionVar.get('tb_viewmode_msg', False)
+    message_pos = pm.optionVar.get('tb_viewmode_msg_pos', 'topLeft')
+
     ver = cmds.about(version=True)
     grease = ver in {'2014': True, '2015': True}
-    panel = cmds.getPanel(underPointer=True) or cmds.getPanel(withFocus=True)
+    panel = mod_panel().getModelPanel()
 
     if cmds.getPanel(typeOf=panel) == "modelPanel":
         if data == "joints":
@@ -20,7 +26,12 @@ def viewMode(data):
             msg = "meshes"
         else:
             msg = "controls and meshes"
-            message.info(prefix='view', message=' : %s' % msg, position='topLeft')
+            if show_message:
+                message.info(prefix='view',
+                             message=' : %s' % msg,
+                             position=message_pos,
+                             fadeStayTime=3.0,
+                             fadeOutTime=3.0)
             cmds.modelEditor(panel, edit=True, allObjects=True)
             return
 
@@ -33,7 +44,11 @@ def viewMode(data):
                          locators=state)
         if grease: 
             cmds.modelEditor(panel, edit=True, greasePencils=True)
-
-        message.info(prefix='view', message=' : %s' % msg, position='topLeft', fadeStayTime=3.0, fadeOutTime=3.0)
+        if show_message:
+            message.info(prefix='view',
+                         message=' : %s' % msg,
+                         position=message_pos,
+                         fadeStayTime=3.0,
+                         fadeOutTime=3.0)
             
 

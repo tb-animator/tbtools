@@ -23,3 +23,23 @@ class mod_panel():
 
     def get_modelEditors(self, editors):
         return filter(self.filter_modelEditors, editors)
+
+
+# used for weird lookups for graph editor curve framing
+class Attributes():
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def get_attribute_from_curve(curve):
+        attr = None
+        connType = pm.nodeType(pm.listConnections(curve, destination=True))
+        print connType
+        if connType == 'character':
+            conns = pm.listConnections(curve, destination=True, plugs=True)
+            print conns
+            attr = pm.listConnections(conns, destination=True, source=False, plugs=True)[0]
+
+        else:
+            attr = pm.listConnections(curve, destination=True, plugs=True)[0]
+        return attr

@@ -39,7 +39,8 @@ def make_command_list():
     command_list.append(tb_hkey(name='smart_frame_curves', annotation='smart framing of keys',
                                 category=cat, command = [ 'import tb_graphEditor as ge',
                                                          'reload(ge)',
-                                                         'ge.graphEditor().smart_frame()' ]) )
+                                                         'ge.graphEditor().open_graph_editor()' ]) )
+
     command_list.append(tb_hkey(name='match_tangent_start_to_end', annotation='',
                                 category=cat, command = [ 'import key_mod as ky',
                                                          'reload(ky)',

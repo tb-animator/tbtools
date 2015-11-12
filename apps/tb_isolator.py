@@ -39,7 +39,6 @@ class isolator():
         reload (iso)
         iso.isolate()
         '''
-        selection = pm.ls(selection=True)
         panel = mod_panel().getModelPanel()
 
         state = pm.isolateSelect(panel, query=True, state=True)

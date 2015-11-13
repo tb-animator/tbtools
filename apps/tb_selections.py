@@ -39,7 +39,9 @@ class quick_selection():
         self.main_set = self.create_main_set()
         self.save_dir = pm.optionVar.get('tb_qs_folder', 'c://qss//')
         self.qss_files = []
-        pass
+        self.rb_col = None
+        self.ns_text = None
+        self.namespace_mode = ""
 
     def create_main_set(self):
         if not cmds.objExists("QuickSelects"):
@@ -82,6 +84,8 @@ class quick_selection():
     def save_qs(self, qs_name, selection):
         print "saving ", qs_name, "with", selection
         pre_sel = cmds.ls(selection=True)
+        # make sure we have the main set
+
         # only select existing objects
         existing_obj = self.existing_obj_in_list(selection)
         if existing_obj:
@@ -90,10 +94,53 @@ class quick_selection():
             if cmds.objExists(qs_name):
                 if cmds.nodeType(qs_name) == 'objectSet':
                     cmds.delete(qs_name)
+            self.create_main_set()
             qs = cmds.sets(name=qs_name, text="gCharacterSet")
             cmds.select(qs, replace=True)
             cmds.sets(qs,addElement=self.main_set)
             cmds.select(pre_sel, replace=True)
+        self.create_main_set()
+
+    # get data loaded from a qss file but muck about with namespaces first
+    def save_qs_from_file(self, qs_name, selection):
+        def process_namespace():
+            sel = pm.ls(selection=True)
+            if sel:
+                namespace_override = sel[0].namespace()
+                print namespace_override
+            else:
+                print "no selection!"
+            if namespace_override:
+                print "namespace overridden" , namespace_override
+            else:
+                print "no namespace on sel"
+            for sel in selection:
+                processed_list.append(namespace_override + sel.split(":")[-1])
+            return processed_list
+
+        def replace_namespace(namespace=""):
+            for sel in selection:
+                processed_list.append(namespace + sel.split(":")[-1])
+
+        print self.namespace_mode
+        print selection
+        processed_list = []
+        if self.namespace_mode == "sel":
+            processed_list = process_namespace()
+            msg = 'quick selects created for %s' % qs_name
+        elif self.namespace_mode == "spec":
+            processed_list = replace_namespace(namespace=pm.textField(self.ns_text, query=True, text=True))
+            msg = 'no quick selects created for specified namespace %s' % qs_name
+        else:
+            processed_list = selection
+            msg = 'quick selects created for %s' % qs_name
+        print processed_list
+        if processed_list:
+            self.save_qs(qs_name, processed_list)
+            message.info(position="botRight", prefix="info", message=msg, fadeStayTime=5, fadeOutTime=5.0)
+        else:
+            # process failed, make error
+            message.error(position="botRight", prefix="Error", message=msg, fadeStayTime=5, fadeOutTime=5.0)
 
     def save_qs_to_file(self):
         self.all_sets = self.get_sets()
@@ -117,12 +164,14 @@ class quick_selection():
                 out_data.append(qss_data_obj(qs_name=str(qsets), qs_objects=self.get_set_contents(qsets)))
             pickle.dump( out_data, open(save_file, "wb" ) )
 
+
     def load_qss_file(self, qss_name):
         file_name = os.path.join(self.save_dir, qss_name)
         loaded_data = pickle.load(open(file_name, "rb"))
         for qs in loaded_data:
-            self.save_qs(qs.qs_name, qs.qs_objects)
+            self.save_qs_from_file(qs.qs_name, qs.qs_objects)
 
+    # gets the list of qss files
     def restore_qs_from_dir(self):
         for qss_files in os.listdir(self.save_dir):
             if qss_files.endswith(".qss"):
@@ -130,30 +179,74 @@ class quick_selection():
         if qss_files:
             self.restoreWin()
 
+    # mini ui with a button!
     def qss_widget(self, qss_name="", parent=""):
         rLayout = pm.rowLayout(numberOfColumns=2,
                                adjustableColumn=1,
-                               columnWidth2=(200,50),
+                               columnWidth2=(180,50),
                                columnAttach2=("left", "right"),
                                parent=parent)
         pm.text(label=str(qss_name), parent=rLayout)
 
         pm.button(label="load", parent=rLayout, command=lambda *args : self.load_qss_file(qss_name))
 
+    def get_ns_mode(self):
+        print self.namespace_mode
+
+
+    def namespace_widget(self, parent=""):
+        def fileMode(*args):
+            self.namespace_mode = "file"
+        def selMode(*args):
+            self.namespace_mode = "sel"
+        def specMode(*args):
+            self.namespace_mode = "spec"
+
+        fLayout = pm.frameLayout(parent=parent, label="please select namespace source")
+        cLayout = pm.columnLayout()
+        r_layout = pm.rowLayout(numberOfColumns=2,
+                                columnWidth1=60,
+                                adjustableColumn=2)
+        pm.columnLayout(width = 150)
+        pm.text(label="namespace source")
+        pm.text(label="")
+        pm.setParent(r_layout)
+        g_layout = pm.gridLayout(numberOfColumns=2, cellWidthHeight=(100,20))
+        self.rb_col = pm.radioCollection()
+        print self.rb_col
+        rb_file = pm.radioButton(collection=self.rb_col,
+                                 label='from file',
+                                 onCommand=fileMode)
+        rb_sel = pm.radioButton("fromSel",
+                                collection=self.rb_col,
+                                label='from selection',
+                                onCommand=selMode)
+        rb_spec = pm.radioButton("spec",
+                                 collection=self.rb_col,
+                                 label='specify',
+                                 onCommand=specMode)
+        pm.radioCollection( self.rb_col, edit=True, select=rb_file )
+        self.ns_text = pm.textField()
+
+
+    # ui for loading sets
     def restoreWin(self):
         if pm.window("qssLoader", exists=True):
             pm.deleteUI("qssLoader")
-        qss_win = pm.window("qssLoader", width=300)
+        qss_win = pm.window("qssLoader", width=300, height=400)
         layout = pm.columnLayout(adjustableColumn=True )
         pm.text(font="boldLabelFont",label="quick select files")
 
-        scroll_layout = pm.scrollLayout(parent=layout, height=400)
+        scroll_layout = pm.scrollLayout(parent=layout,
+                                        childResizable=True,
+                                        height=200)
+
         sub_layout = pm.columnLayout(adjustableColumn=True, parent=scroll_layout)
 
         for items in self.qss_files:
             print items
             self.qss_widget(qss_name=items, parent=sub_layout)
-
+        self.namespace_widget(parent=layout)
         pm.showWindow(qss_win)
 
 

@@ -27,7 +27,7 @@ class folder_picker():
         pm.text(self.label, edit=True, label="")
         pm.textField(self.folder_field,
                      edit=True,
-                     text=pm.optionVar.get(option_variable, '')
+                     text=pm.optionVar.get(option_variable, 'c:/qss/')
                      )
         pm.symbolButton(self.button,
                         edit=True,

@@ -84,6 +84,7 @@ class anim_optionWindow(object):
         self.reminder_img = "arrow.png"
         self.curve_btn_img = "curves.png"
         self.transform_btn_img = "transform.png"
+        self.camera_btn_img = "tb_camera.png"
 
         # dictionary for category layouts
         self.categories = {}
@@ -136,11 +137,8 @@ class anim_optionWindow(object):
         self.optionLayouts.append(self._manipulator_menu(self._form_layout))
 
         # add the file options menu
-        # self.optionLayouts.append(self._file_dialog_menu(self._form_layout))
+        self.optionLayouts.append(self._file_dialog_menu(self._form_layout))
 
-        # self.optionLayouts.append(self._graph_editor_menu(self._form_layout))
-        # self.optionLayouts.append(self._inviewMessage_menu(self._form_layout))
-        # self.optionLayouts.append(self._epicRef_menu(self._form_layout))
         # revert ui template
         pm.setUITemplate(popTemplate=True)
 
@@ -254,9 +252,10 @@ class anim_optionWindow(object):
     def _menu_category(self, _parent):
         self._cat_layout = pm.columnLayout()
         self._cat_form = pm.formLayout()
-        # file_option_btn = self._categoryButton(name="file_op", icon='folder.png', parent=self._cat_layout)
+        file_option_btn = self._categoryButton(name="file_op", icon='folder.png', parent=self._cat_layout)
         keys_option_btn = self._categoryButton(name="keys_op", icon=self.curve_btn_img, parent=self._cat_layout)
         manips_option_btn = self._categoryButton(name="manips_op", icon=self.transform_btn_img, parent=self._cat_layout)
+        # viewport_option_btn = self._categoryButton(name="view_op", icon=self.camera_btn_img, parent=self._cat_layout)
 
         pm.setParent(_parent)
 
@@ -266,15 +265,17 @@ class anim_optionWindow(object):
         self._file_form = pm.formLayout()
 
         _dialogStyle = ['OS native', 'Maya default']
+        '''
         playblast_folder_picker = tb_UI.folder_picker().create(parent=self._file_form,
                                                                label="playblast",
                                                                option_variable='tb_playblast_folder',
                                                                top_form=self._file_form
                                                                )
+        '''
         selections_folder_picker = tb_UI.folder_picker().create(parent=self._file_form,
-                                                                label="quick selects",
-                                                                option_variable='tb_playblast_folder',
-                                                                top_control=playblast_folder_picker,
+                                                                label="quick select save directory",
+                                                                option_variable='tb_qs_folder',
+                                                                #top_control=playblast_folder_picker,
                                                                 top_form=self._file_form
                                                                 )
 

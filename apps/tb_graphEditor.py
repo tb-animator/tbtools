@@ -86,10 +86,8 @@ class graphEditor():
             for curves in self.current_curves:
                 key_values.extend(keys.get_key_values(curves))
         else:
-            print "here"
             self.frame_range = [self.range[0], self.range[1]]
             active_objects = pm.selectionConnection(self.select_connection, query=True, keyframeList=True, object=True)
-            print "active_objects", active_objects
             if active_objects:
                 for obj in active_objects:
                     try:

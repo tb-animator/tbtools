@@ -115,15 +115,28 @@ def make_command_list():
                                        'reload (td)',
                                        'td.drag(False)']))
     cat = 'tbtools_selection'
+    # char set selector
     command_list.append(tb_hkey(name='select_character_set_objs', annotation='',
                                 category=cat, command=['import tb_selections as tb_sel',
                                                        'reload (tb_sel)',
                                                        'tb_sel.select_cheracter_set()']))
+    # quick selection set - select
     command_list.append(tb_hkey(name='select_quick_select_set_objs', annotation='',
                                 category=cat, command=['import tb_selections as tb_sel',
                                                        'reload (tb_sel)',
                                                        'tb_sel.quick_selection().qs_select()']))
-
+    command_list.append(tb_hkey(name='quick_select_load_window', annotation='load quick selects from saved files',
+                                category=cat, command=['import tb_selections as tb_sel',
+                                                       'reload (tb_sel)',
+                                                       'tb_sel.quick_selection().restore_qs_from_dir()']))
+    command_list.append(tb_hkey(name='save_quick_selects_to_file', annotation='load quick selects from saved files',
+                                category=cat, command=['import tb_selections as tb_sel',
+                                                       'reload (tb_sel)',
+                                                       'tb_sel.quick_selection().save_qs_to_file()']))
+    command_list.append(tb_hkey(name='create_quick_select_set', annotation='load quick selects from saved files',
+                                category=cat, command=['import tb_selections as tb_sel',
+                                                       'reload (tb_sel)',
+                                                       'tb_sel.quick_selection().create_qs_set()']))
     return command_list
 
 

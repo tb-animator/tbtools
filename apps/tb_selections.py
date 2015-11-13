@@ -285,10 +285,15 @@ class quick_selection():
     @staticmethod
     def check_set_membership(selection, sel_set):
         sel_set_members = cmds.sets(sel_set, query=True)
-        if [ i for i in selection if i in sel_set_members]:
-            return sel_set
+        if sel_set_members:
+            if [ i for i in selection if i in sel_set_members]:
+                return sel_set
+            else:
+                return None
         else:
-            return None
+            msg = 'no quick selects found in scene'
+            message.error(position="botRight", prefix="Error", message=msg, fadeStayTime=3.0, fadeOutTime=4.0)
+
 
 class qss_data_obj():
     def __init__(self, qs_name="", qs_objects=[]):

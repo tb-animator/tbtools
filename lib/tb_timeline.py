@@ -28,13 +28,75 @@ __author__ = 'tom.bailey'
 
 
 import pymel.core as pm
+import maya.mel as mel
 
 class timeline():
     def __init__(self):
-        pass
-
+        # get the name of the playback control
+        self.time_slider = mel.eval('$tmpVar=$gPlayBackSlider')
+        # current animation range
+        self.range = [self.get_min(), self.get_min()]
+        # current selected range
+        self.highlight = self.get_highlighted_range()
+        # cached range
+        self.cached_range = self.recall_range()
+        
     @staticmethod
     def get_range():
         return [pm.playbackOptions(query=True, minTime=True), pm.playbackOptions(query=True, maxTime=True)]
 
+    @staticmethod
+    def get_min():
+        return pm.playbackOptions(query=True, minTime=True)
 
+    @staticmethod
+    def get_max():
+        return pm.playbackOptions(query=True, maxTime=True)
+
+    def get_highlighted_range(self):
+        return pm.timeControl(self.time_slider, query=True, rangeArray=True)
+
+    # sets the start frame of playback
+    @staticmethod
+    def set_min(time=pm.getCurrentTime()):
+        pm.playbackOptions(minTime=time)
+
+    # sets the end frame of playback
+    @staticmethod
+    def set_max(time=pm.getCurrentTime()):
+        pm.playbackOptions(maxTime=time)
+
+    # crops to highlighted range on timeline
+    def crop_to_selection(self):
+        self.set_min(time=self.highlight[0])
+        self.set_max(time=self.highlight[1])
+
+    def range_in_frames(self):
+        range = self.get_range()
+        return range[1]-range[0]
+
+    # shift active time range so current frame is start frame
+    def shift_start(self):
+        self.set_max(time=(pm.getCurrentTime()+self.range_in_frames()))
+        self.set_min()
+
+    # shift active time range so current frame is start frame
+    def shift_end(self):
+        print self.range_in_frames()
+        self.set_min(time=(pm.getCurrentTime()-self.range_in_frames()))
+        self.set_max()
+
+    def cache_range(self, _min=get_min, _max=get_max):
+        pm.optionVar(floatValue=('tb_tl_min', _min))
+        pm.optionVar(floatValue=('tb_tl_max', _max))
+
+    # this gets used int he temp playback of highlighted range
+    def recall_range(self):
+        _min = pm.optionVar.get('tb_tl_min', self.get_min())
+        _max = pm.optionVar.get('tb_tl_max', self.get_max())
+        return _min, _max
+
+    def info(self):
+        print "\ntime control : ", self.time_slider
+        print "anim range   : ", self.range
+        print "highlight    : ", self.highlight

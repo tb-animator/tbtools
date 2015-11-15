@@ -26,7 +26,7 @@ import maya.cmds as cmds
 import maya.mel as mel
 import tb_UI as tb_UI
 import pymel.core as pm
-
+from tb_timeDragger import timeDragger
 from tb_manipulators import manips
 
 reload(tb_UI)
@@ -309,6 +309,18 @@ class anim_optionWindow(object):
                                                        positionLabel=manips().rotate_messageLabel,
                                                        messageMenu=True,
                                                        top_control=translate_options,
+                                                       top_form=_manip_form
+                                                       )
+
+        time_drag_options = tb_UI.checkBox_group().create(label="smooth drag tool options",
+                                                       parent=_manip_form,
+                                                       variable=timeDragger().optionVar,
+                                                       columns=4,
+                                                       optionList=timeDragger().modes,
+                                                       positionMenu=timeDragger().messagePos,
+                                                       positionLabel="message position",
+                                                       messageMenu=True,
+                                                       top_control=rotate_options,
                                                        top_form=_manip_form
                                                        )
 

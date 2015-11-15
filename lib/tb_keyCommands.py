@@ -106,14 +106,24 @@ def make_command_list():
                                                        'reload (tbm)',
                                                        'tbm.manips().cycle_key_type()']))
     command_list.append(tb_hkey(name='smooth_drag_timeline_on', annotation='timeslider tool with no frame snapping',
-                                category=cat, command=['import tb_timeDragger as td',
-                                                       'reload (td)',
-                                                       'td.drag(True)']))
+                                category=cat, command=['try:',
+                                       '	my_td.drag(True)',
+                                       'except:',
+                                       '	from tb_timeDragger import timeDragger',
+                                       '	my_td = timeDragger()',
+                                       '	my_td.drag(True)',
+                                       ]))
     command_list.append(
         tb_hkey(name='smooth_drag_timeline_off', annotation='set to same hotkey as ON, but tick release',
-                category=cat, command=['import tb_timeDragger as td',
-                                       'reload (td)',
-                                       'td.drag(False)']))
+                category=cat, command=['try:',
+                                       '	my_td.drag(False)',
+                                       'except:',
+                                       '	from tb_timeDragger import timeDragger',
+                                       '	my_td = timeDragger()',
+                                       '	my_td.drag(False)',
+                                       ]))
+
+
     cat = 'tbtools_selection'
     command_list.append(tb_hkey(name='select_character_set_objs', annotation='',
                                 category=cat, command=['import tb_selections as tb_sel',

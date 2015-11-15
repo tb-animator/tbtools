@@ -48,6 +48,8 @@ class timeDragger():
     def drag(self, state):
         self.update_options()
         print self.get_previous_ctx()
+        print "state", state
+        cmds.timeControl(self.aPlayBackSliderPython, edit=True, snap=not state )
         if state:
             mel.eval('storeLastAction("restoreLastContext ' +  self.get_previous_ctx() + '")')
             if self.toggle_background:
@@ -69,7 +71,7 @@ class timeDragger():
             pm.setCurrentTime(int(pm.getCurrentTime()))
             cmds.displayPref(displayGradient=self.background_state)
             mel.eval('invokeLastAction')
-        cmds.timeControl(self.aPlayBackSliderPython, edit=True, snap=state )
+
 
     def warn(self):
         self.failsafe = None

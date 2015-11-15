@@ -52,6 +52,7 @@ def make_command_list():
 
     # camera tools
     cat = 'tbtools_cameras'
+
     command_list.append(tb_hkey(name='tracking_camera_track',
                                 annotation='creates/rebuilds a tracking camera to track your current selection',
                                 category=cat, command=['import tb_trackingCam as tc',
@@ -62,6 +63,11 @@ def make_command_list():
                                 category=cat, command=['import tb_trackingCam as tc',
                                                        'reload (tc)',
                                                        'tc.track(\"retarget\",\"tracker\")']))
+    command_list.append(tb_hkey(name='tracking_camera_persp',
+                                annotation='swaps the view to the perspective camera, matching your current view',
+                                category=cat, command=['import tb_trackingCam as tc',
+                                                       'reload (tc)',
+                                                       'tc.track(\"persp\")']))
 
 
     # viewport tools

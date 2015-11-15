@@ -32,7 +32,7 @@ def open_options(*args):
     tbo.anim_optionWindow().showUI()
 
 def open_anim_page(*args):
-    webbrowser.open('http://tb-animator.blogspot.co.uk/')
+    webbrowser.open('http://tb-animator.blogspot.co.uk/p/tools-documentaion.html')
 
 def download_updates(*args):
     import updater as upd

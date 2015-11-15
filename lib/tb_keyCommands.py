@@ -62,11 +62,7 @@ def make_command_list():
                                 category=cat, command=['import tb_trackingCam as tc',
                                                        'reload (tc)',
                                                        'tc.track(\"retarget\",\"tracker\")']))
-    command_list.append(tb_hkey(name='tracking_camera_persp',
-                                annotation='swaps the view to the perspective camera, matching your current view',
-                                category=cat, command=['import tb_trackingCam as tc',
-                                                       'reload (tc)',
-                                                       'tc.track(\"persp\")']))
+
 
     # viewport tools
     cat = 'tbtools_view'
@@ -86,6 +82,26 @@ def make_command_list():
                                 category=cat, command=['import tb_isolator as tbi',
                                                        'reload(tbi)',
                                                        'tbi.isolator().toggle_isolate()']))
+    command_list.append(tb_hkey(name='toggle_playback_tool',
+                                annotation='does fancy playback toggling',
+                                category=cat, command=['try:',
+                                       '	player.playPause()',
+                                       'except:',
+                                       '	import tb_playback as tbp',
+                                       '	reload(tbp)',
+                                       '	player = tbp.playback()',
+                                       '	player.playPause()',
+                                       ]))
+    command_list.append(tb_hkey(name='flip_playback',
+                                annotation='does fancy playback toggling',
+                                category=cat, command=['try:',
+                                       '	player.playPause(flip=True)',
+                                       'except:',
+                                       '	import tb_playback as tbp',
+                                       '	reload(tbp)',
+                                       '	player = tbp.playback()',
+                                       '	player.playPause(flip=True)',
+                                       ]))
 
     # manipulator tools
     cat = 'tbtools_manipulators'

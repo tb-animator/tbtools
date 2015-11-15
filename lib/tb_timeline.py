@@ -35,7 +35,9 @@ class timeline():
         # get the name of the playback control
         self.time_slider = mel.eval('$tmpVar=$gPlayBackSlider')
         # current animation range
-        self.range = [self.get_min(), self.get_min()]
+        self.range = [self.get_min(), self.get_max()]
+        #
+        self.cached_range = []
         # current selected range
         self.highlight = self.get_highlighted_range()
         # cached range
@@ -53,8 +55,16 @@ class timeline():
     def get_max():
         return pm.playbackOptions(query=True, maxTime=True)
 
-    def get_highlighted_range(self):
-        return pm.timeControl(self.time_slider, query=True, rangeArray=True)
+    def get_highlighted_range(self, min=False, max=False):
+        if min:
+            return pm.timeControl(self.time_slider, query=True, rangeArray=True)[0]
+        elif max:
+            return pm.timeControl(self.time_slider, query=True, rangeArray=True)[1]
+        else:
+            return pm.timeControl(self.time_slider, query=True, rangeArray=True)
+
+    def isHighlighted(self):
+        return self.get_highlighted_range()[1]-self.get_highlighted_range()[0] > 1
 
     # sets the start frame of playback
     @staticmethod
@@ -86,9 +96,8 @@ class timeline():
         self.set_min(time=(pm.getCurrentTime()-self.range_in_frames()))
         self.set_max()
 
-    def cache_range(self, _min=get_min, _max=get_max):
-        pm.optionVar(floatValue=('tb_tl_min', _min))
-        pm.optionVar(floatValue=('tb_tl_max', _max))
+    def cache_range(self):
+        return [ self.get_min(), self.get_max() ]
 
     # this gets used int he temp playback of highlighted range
     def recall_range(self):

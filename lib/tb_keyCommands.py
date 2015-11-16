@@ -36,19 +36,20 @@ def make_command_list():
 
     # keyframing tools
     cat = 'tbtools_keyframing'
-    command_list.append(tb_hkey(name='smart_frame_curves', annotation='smart framing of keys',
+    command_list.append(tb_hkey(name='smart_frame_curves', annotation='smart framing of keys, or focus on selection',
+                                category=cat, command=['import tb_graphEditor as ge',
+                                                       'reload(ge)',
+                                                       'ge.graphEditor().smart_frame()']))
+    command_list.append(tb_hkey(name='smart_open_graphEditor', annotation='smart framing of keys, and opens the graph editor',
                                 category=cat, command=['import tb_graphEditor as ge',
                                                        'reload(ge)',
                                                        'ge.graphEditor().open_graph_editor()']))
-
     command_list.append(tb_hkey(name='match_tangent_start_to_end', annotation='',
-                                category=cat, command=['import key_mod as ky',
-                                                       'reload(ky)',
-                                                       'ky.keyTools().match(\"start\")']))
+                                category=cat, command=['from tb_keyframe import key_mod',
+                                                       'key_mod().match(\"start\")']))
     command_list.append(tb_hkey(name='match_tangent_end_to_start', annotation='',
-                                category=cat, command=['import key_mod as ky',
-                                                       'reload(ky)',
-                                                       'ky.keyTools().match(\"end\")']))
+                                category=cat, command=['from tb_keyframe import key_mod',
+                                                       'key_mod().match(\"end\")']))
 
     # camera tools
     cat = 'tbtools_cameras'

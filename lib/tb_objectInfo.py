@@ -31,15 +31,15 @@ class Attributes():
         pass
 
     @staticmethod
-    def get_attribute_from_curve(curve):
+    def get_attribute_from_curve(debug=False, curve=""):
         attr = None
-        connType = pm.nodeType(pm.listConnections(curve, destination=True))
-        print connType
-        if connType == 'character':
+        char_node = pm.listConnections(curve, type='character', destination=True)
+        if char_node:
             conns = pm.listConnections(curve, destination=True, plugs=True)
             print conns
             attr = pm.listConnections(conns, destination=True, source=False, plugs=True)[0]
-
         else:
             attr = pm.listConnections(curve, destination=True, plugs=True)[0]
+        if debug:
+            print "attr ", attr, " found for curve", curve
         return attr

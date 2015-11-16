@@ -46,7 +46,7 @@ if not pm.optionVar(exists='tb_graph_editor_callback'):
 class graphEditor():
     def __init__(self):
         self.selection = pm.ls(selection=True)
-        self.current_panel = mod_panel().getModelPanel()
+        self.current_panel = pm.getPanel(withFocus=True)
         self.range = timeline.get_range()
         self.vertical_buffer = 0.2
         self.horizontal_buffer = 0.1
@@ -80,6 +80,7 @@ class graphEditor():
         self.smart_frame_graph_editor(shouldFilter=True)
 
     def smart_frame_graph_editor(self, mode='auto', shouldFilter=False):
+        print "should filter", shouldFilter
         key_values = []
         if self.selected_keys and mode == 'auto':
             self.frame_range = [self.selected_keys[0], self.selected_keys[-1]]
@@ -92,8 +93,8 @@ class graphEditor():
                 for obj in active_objects:
                     try:
                         key_values.extend(keys.get_key_values_from_range(obj, self.range))
-                    except:
-                        pass
+                    except Exception, e:
+                        print e
 
         # sort the key values to get the range
         if key_values:
@@ -115,7 +116,10 @@ class graphEditor():
                             )
 
         if shouldFilter:
+            print "should filter selection"
             self.filter_graph_editor()
+        else:
+            print "not filtering"
 
 
     def filter_graph_editor(self):
@@ -148,7 +152,8 @@ class graphEditor():
 
             for curves in self.current_curves:
                 print "selecting", curves
-                attr = Attributes().get_attribute_from_curve(curves)
+                attr = Attributes().get_attribute_from_curve(debug=True, curve=curves)
+                print "got attrs", attr
                 pm.selectionConnection('graphEditor1FromOutliner', edit=True, object=attr)
 
         self.add_graph_editor_callback()

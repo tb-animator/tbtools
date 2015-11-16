@@ -107,7 +107,7 @@ class anim_optionWindow(object):
         self.window = pm.window(self.window, title='Animation options',
                                 width=self._width,
                                 height=self._height,
-                                sizeable=False)
+                                sizeable=True)
         if pm.uiTemplate('animUI_template', exists=True):
             pm.deleteUI('animUI_template', uiTemplate=True)
 

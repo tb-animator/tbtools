@@ -57,7 +57,7 @@ class manips():
         self.rotate_messageLabel = "message position"
 
         # selection mask
-        self.selection_modes = ['Controls', 'All']
+        self.selection_modes = ['All', 'Controls']
         self.selection_optionVar = "tb_cycle_selection"
         self.rotate_messageVar = "tb_cycle_selection_msg_pos"
 

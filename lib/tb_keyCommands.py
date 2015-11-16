@@ -53,6 +53,7 @@ def make_command_list():
 
     # camera tools
     cat = 'tbtools_cameras'
+
     command_list.append(tb_hkey(name='tracking_camera_track',
                                 annotation='creates/rebuilds a tracking camera to track your current selection',
                                 category=cat, command=['import tb_trackingCam as tc',
@@ -68,6 +69,7 @@ def make_command_list():
                                 category=cat, command=['import tb_trackingCam as tc',
                                                        'reload (tc)',
                                                        'tc.track(\"persp\")']))
+
 
     # viewport tools
     cat = 'tbtools_view'
@@ -87,6 +89,26 @@ def make_command_list():
                                 category=cat, command=['import tb_isolator as tbi',
                                                        'reload(tbi)',
                                                        'tbi.isolator().toggle_isolate()']))
+    command_list.append(tb_hkey(name='toggle_playback_tool',
+                                annotation='does fancy playback toggling',
+                                category=cat, command=['try:',
+                                       '	player.playPause()',
+                                       'except:',
+                                       '	import tb_playback as tbp',
+                                       '	reload(tbp)',
+                                       '	player = tbp.playback()',
+                                       '	player.playPause()',
+                                       ]))
+    command_list.append(tb_hkey(name='flip_playback',
+                                annotation='does fancy playback toggling',
+                                category=cat, command=['try:',
+                                       '	player.playPause(flip=True)',
+                                       'except:',
+                                       '	import tb_playback as tbp',
+                                       '	reload(tbp)',
+                                       '	player = tbp.playback()',
+                                       '	player.playPause(flip=True)',
+                                       ]))
 
     # manipulator tools
     cat = 'tbtools_manipulators'
@@ -107,14 +129,24 @@ def make_command_list():
                                                        'reload (tbm)',
                                                        'tbm.manips().cycle_key_type()']))
     command_list.append(tb_hkey(name='smooth_drag_timeline_on', annotation='timeslider tool with no frame snapping',
-                                category=cat, command=['import tb_timeDragger as td',
-                                                       'reload (td)',
-                                                       'td.drag(True)']))
+                                category=cat, command=['try:',
+                                       '	my_td.drag(True)',
+                                       'except:',
+                                       '	from tb_timeDragger import timeDragger',
+                                       '	my_td = timeDragger()',
+                                       '	my_td.drag(True)',
+                                       ]))
     command_list.append(
         tb_hkey(name='smooth_drag_timeline_off', annotation='set to same hotkey as ON, but tick release',
-                category=cat, command=['import tb_timeDragger as td',
-                                       'reload (td)',
-                                       'td.drag(False)']))
+                category=cat, command=['try:',
+                                       '	my_td.drag(False)',
+                                       'except:',
+                                       '	from tb_timeDragger import timeDragger',
+                                       '	my_td = timeDragger()',
+                                       '	my_td.drag(False)',
+                                       ]))
+
+
     cat = 'tbtools_selection'
     # char set selector
     command_list.append(tb_hkey(name='select_character_set_objs', annotation='',

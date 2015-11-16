@@ -104,10 +104,8 @@ class positionWidget():
                                     )
         for pos in tb_msg.Message().positions:
             pm.menuItem(label=pos)
-
-        default_value = pm.optionVar.get(name, 'midCenter')
-        print
-        default_value, self.positions.index(default_value)
+        print name
+        default_value = pm.optionVar.get(name, 'topLeft')
         pm.optionMenu(option_Menu, edit=True, select=self.positions.index(default_value) + 1)
         # return option_Menu
 

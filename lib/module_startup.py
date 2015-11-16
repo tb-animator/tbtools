@@ -26,3 +26,4 @@ class initialise():
 
         mutils.executeDeferred('import tb_menu as tb_menu;tb_menu.make_ui()')
         mutils.executeDeferred('import updater as upd;upd.updater().check_version()')
+        mutils.executeDeferred('import tb_graphEditor as ge;ge.graphEditor().add_graph_editor_callback()')

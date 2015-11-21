@@ -15,8 +15,10 @@ class updater():
         self.base_dir = os.path.normpath(os.path.dirname(__file__))
         self.data_file = "prj_files.poo"
         self.out_files = []
-        self.version = pm.optionVar.get('tb_version', 1.0 )
+        self.local_project_info = self.load_project_data_from_local()
+        self.version = pm.optionVar.get('tb_version', self.local_project_info.version )
         self.project_info = self.load_project_data_from_git()
+
 
     def check_version(self):
         if self.project_info.version > self.version:
@@ -42,6 +44,11 @@ class updater():
         data = pickle.load(urllib2.urlopen(url, "rb"))
         return data
 
+    def load_project_data_from_local(self):
+        url = self.base_dir + self.data_file
+        print url
+        data = pickle.load(urllib2.urlopen(url, "rb"))
+        return data
 
     def create_url(self, item):
         url = (self.master_url + item).replace("\\","/")
@@ -105,6 +112,7 @@ class updater():
         pm.optionVar(floatValue=('tb_version', self.project_info.version) )
 
 
+
 class updaterWindow():
     def __init__(self):
         self.project_data = updater().project_info
@@ -151,4 +159,11 @@ class updaterWindow():
 
 
 
+def update_hotkeys():
+    try:
+        import tb_keyCommands as tb_hotKeys
+        reload(tb_hotKeys)
+        tb_hotKeys.hotkey_tool().update_commands()
+    except:
+        print "warning, hotkey update failed, please restart maya"
 

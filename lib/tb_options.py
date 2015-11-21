@@ -265,17 +265,17 @@ class anim_optionWindow(object):
         self._file_form = pm.formLayout()
 
         _dialogStyle = ['OS native', 'Maya default']
-        '''
+
         playblast_folder_picker = tb_UI.folder_picker().create(parent=self._file_form,
                                                                label="playblast",
                                                                option_variable='tb_playblast_folder',
                                                                top_form=self._file_form
                                                                )
-        '''
+
         selections_folder_picker = tb_UI.folder_picker().create(parent=self._file_form,
                                                                 label="quick select save directory",
                                                                 option_variable='tb_qs_folder',
-                                                                #top_control=playblast_folder_picker,
+                                                                top_control=playblast_folder_picker,
                                                                 top_form=self._file_form
                                                                 )
 

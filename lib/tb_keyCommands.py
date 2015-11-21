@@ -89,6 +89,12 @@ def make_command_list():
                                 category=cat, command=['import tb_isolator as tbi',
                                                        'reload(tbi)',
                                                        'tbi.isolator().toggle_isolate()']))
+    command_list.append(tb_hkey(name='incremental_playblast_quicktime', annotation='incrememnt and save playblasts in mov',
+                                category=cat, command=['import tb_playblast as tbp',
+                                                       'tbp.make_playblast(type="mov")']))
+    command_list.append(tb_hkey(name='incremental_playblast_avi', annotation='incrememnt and save playblasts in avi',
+                                category=cat, command=['import tb_playblast as tbp',
+                                                       'tbp.make_playblast(type="avi")']))
     command_list.append(tb_hkey(name='toggle_playback_tool',
                                 annotation='does fancy playback toggling',
                                 category=cat, command=['try:',

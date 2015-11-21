@@ -43,3 +43,14 @@ class Attributes():
         if debug:
             print "attr ", attr, " found for curve", curve
         return attr
+
+    def connect_message(self, source="", destination="", attribute=""):
+        self.add_message(source=source, attribute=attribute)
+        msg_attr = pm.Attribute('%s.%s' % (source, attribute))
+        pm.connectAttr(destination.message, msg_attr)
+
+    def add_message(self, source="", attribute=""):
+        if pm.attributeQuery(attribute, node=source, exists=True ):
+            print "deleting", attribute, "from", source
+            pm.deleteAttr(source, attribute=attribute)
+        pm.addAttr(source, ln=attribute, at='message', k=False)

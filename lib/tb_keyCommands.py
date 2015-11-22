@@ -176,6 +176,32 @@ def make_command_list():
                                 category=cat, command=['import tb_selections as tb_sel',
                                                        'reload (tb_sel)',
                                                        'tb_sel.quick_selection().create_qs_set()']))
+    # pickwalk (multi)
+    command_list.append(tb_hkey(name='pickwalk_up', annotation='',
+                                category=cat, command=['from tb_selections import pickwalker',
+                                                       'pickwalker().walk(up=True)']))
+    command_list.append(tb_hkey(name='pickwalk_down', annotation='',
+                                category=cat, command=['from tb_selections import pickwalker',
+                                                       'pickwalker().walk(down=True)']))
+    command_list.append(tb_hkey(name='pickwalk_left', annotation='',
+                                category=cat, command=['from tb_selections import pickwalker',
+                                                       'pickwalker().walk(left=True)']))
+    command_list.append(tb_hkey(name='pickwalk_right', annotation='',
+                                category=cat, command=['from tb_selections import pickwalker',
+                                                       'pickwalker().walk(right=True)']))
+    # pickwalk multi add
+    command_list.append(tb_hkey(name='pickwalk_up_add', annotation='',
+                                category=cat, command=['from tb_selections import pickwalker',
+                                                       'pickwalker().walk(up=True, add=True)']))
+    command_list.append(tb_hkey(name='pickwalk_down_add', annotation='',
+                                category=cat, command=['from tb_selections import pickwalker',
+                                                       'pickwalker().walk(down=True, add=True)']))
+    command_list.append(tb_hkey(name='pickwalk_left_add', annotation='',
+                                category=cat, command=['from tb_selections import pickwalker',
+                                                       'pickwalker().walk(left=True, add=True)']))
+    command_list.append(tb_hkey(name='pickwalk_right_add', annotation='',
+                                category=cat, command=['from tb_selections import pickwalker',
+                                                       'pickwalker().walk(right=True, add=True)']))
     return command_list
 
 

@@ -1,6 +1,7 @@
 __author__ = 'tom.bailey'
 import pymel.core as pm
 import maya.cmds as cmds
+import maya.mel as mel
 import os, stat
 import pickle
 import tb_messages as message
@@ -28,6 +29,54 @@ def select_cheracter_set():
         msg = 'no character sets found for selection'
         message.error(position="botRight", prefix="Error", message=msg, fadeStayTime=3.0, fadeOutTime=4.0)
 
+
+# class for pickwalking, supports message attributes (more reliable)
+class pickwalker():
+    def __init__(self):
+        self.up = 'cgTkPickWalkup'
+        self.down = 'cgTkPickWalkdown'
+        self.left = 'cgTkPickWalkleft'
+        self.right = 'cgTkPickWalkright'
+
+    def walk(self, up=False, down=False, left=False, right=False, add=False):
+        if up:
+            dir = self.up
+            cmd = "pickWalkUp"
+        elif down:
+            dir = self.down
+            cmd = "pickWalkDown"
+        elif left:
+            dir = self.left
+            cmd = "pickWalkLeft"
+        elif right:
+            dir = self.right
+            cmd = "pickWalkRight"
+
+        allObj = pm.ls(selection=True)
+        if allObj:
+            return_objs = []
+            for obj in allObj:
+                try:
+                    attribute = pm.Attribute(obj + "." + dir)
+                    print attribute
+                    print attribute, attribute.exists(), attribute.type()
+                    if attribute.exists():
+                        # check if the attribute is a message attr
+                        if attribute.type() == 'message':
+                            destination = pm.listConnections(attribute)
+                            return_objs.append(destination)
+                        else:
+                            # get string attr
+                            destination = pm.PyNode("%s%s" % (obj.namespace(), attribute.get() ))
+                            return_objs.append(destination)
+                except:
+                    pass
+            if return_objs:
+                pm.select(return_objs, replace=not add, add=add)
+            else:
+                mel.eval(cmd)
+                if add:
+                    pm.select(allObj, add=True)
 
 # this will find quick selection sets, and if you currently have one object in a set selected
 # it will select the whole set

@@ -49,8 +49,9 @@ class Attributes():
         msg_attr = pm.Attribute('%s.%s' % (source, attribute))
         pm.connectAttr(destination.message, msg_attr)
 
-    def add_message(self, source="", attribute=""):
+    def add_message(self, debug=False, source="", attribute=""):
         if pm.attributeQuery(attribute, node=source, exists=True ):
-            print "deleting", attribute, "from", source
+            if debug:
+                print "deleting", attribute, "from", source
             pm.deleteAttr(source, attribute=attribute)
         pm.addAttr(source, ln=attribute, at='message', k=False)

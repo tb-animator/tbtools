@@ -45,9 +45,9 @@ class updater():
         return data
 
     def load_project_data_from_local(self):
-        url = self.base_dir + self.data_file
-        print url
-        data = pickle.load(urllib2.urlopen(url, "rb"))
+        file_location = os.path.join(self.base_dir+"\\",self.data_file)
+        print file_location
+        data = pickle.load(open(file_location, "rb"))
         return data
 
     def create_url(self, item):

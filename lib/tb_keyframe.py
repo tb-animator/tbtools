@@ -25,7 +25,9 @@
 '''
 
 import pymel.core as pm
-import maya.cmds as mc
+import tb_timeline as tl
+import maya.mel as mel
+import maya.cmds as cmds
 
 class keys():
     def __init__(self):
@@ -81,15 +83,70 @@ class key_mod():
         state = __dict[data]
         print "state", state
         print "mode", data
-        s = mc.playbackOptions(query=True, min=state, max=not state)
-        e = mc.playbackOptions(query=True, max=state, min=not state)
-        animcurves = mc.keyframe(query=True, name=True)
+        range = tl.timeline().get_range()
+        s = range[state]
+        e = range[not state]
+        print "start", s, "end", e
+        animcurves = pm.keyframe(query=True, name=True)
         tangent = []
         if animcurves and len(animcurves):
             for curve in animcurves:
-                tangent = [mc.keyTangent(curve, query=True, time=(s, s), outAngle=state, inAngle=not state)[0],
-                           mc.keyTangent(curve, query=True, time=(e, e), outAngle=state, inAngle=not state)[0]]
-                mc.keyTangent(curve, edit=True, lock=False, time=(e, e),
+                tangent = pm.keyTangent(curve, query=True, time=(s, s), outAngle=True, inAngle=True)
+                print "tangent", tangent
+                pm.keyTangent(curve, edit=True, lock=False, time=(e, e),
                               outAngle=tangent[state], inAngle=tangent[not state])
         else:
             print "no anim curves found"
+
+
+class channels():
+    def __init__(self):
+        self.gChannelBoxName = mel.eval('$temp=$gChannelBoxName')
+        pass
+
+    def getChannels(self, *arg):
+
+        chList = cmds.channelBox(self.gChannelBoxName,
+                                  query=True,
+                                  selectedMainAttributes=True)
+        if chList:
+            for channel in chList:
+                print channel
+        else:
+            print "no channels selected"
+        return chList
+
+    def filterChannels(self):
+
+        '''
+        import filterChannels as ft
+        reload (ft)
+        ft.filterChannels()
+        '''
+
+        channels = self.getChannels()
+        selection = cmds.ls(selection=True)
+
+
+        if selection and channels:
+            cmds.selectionConnection('graphEditor1FromOutliner',edit=True,clear=True)
+            for sel in selection:
+                for channel in channels:
+                    curve = sel+"."+channel
+                    cmds.selectionConnection('graphEditor1FromOutliner',edit=True,object=curve)
+
+    def toggleMuteChannels(self):
+        '''
+        import filterChannels as ft
+        reload (ft)
+        ft.toggleMuteChannels()
+        '''
+        channels = self.getChannels()
+        selection = cmds.ls(selection=True)
+
+        if selection and channels:
+            for sel in selection:
+                for channel in channels:
+                    curve = sel+"."+channel
+                    cmds.mute(sel+"."+channel,
+                              disable=cmds.mute(sel+"."+channel, query=True))

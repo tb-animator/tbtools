@@ -21,7 +21,7 @@
 
     usage - to automatically add a bunch of commands for hotkeys
     import tb_keyCommands as tb_hotKeys
-    tb_hotKeys.add_tbtools_commands()
+    tb_hotKeys.hotkey_tool().update_commands()
 
 *******************************************************************************
 '''
@@ -50,6 +50,11 @@ def make_command_list():
     command_list.append(tb_hkey(name='match_tangent_end_to_start', annotation='',
                                 category=cat, command=['from tb_keyframe import key_mod',
                                                        'key_mod().match(\"end\")']))
+    command_list.append(tb_hkey(name='filter_channelBox', annotation='filters the current channelBox seletion in the graph editor',
+                                category=cat, command=['from tb_keyframe import channels',
+                                                       'channels().filterChannels()']))
+
+
 
     # camera tools
     cat = 'tbtools_cameras'

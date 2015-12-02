@@ -14,6 +14,7 @@ def match(data):
     tangent = []
     if animcurves and len(animcurves):
         for curve in animcurves:
+            print curve
             tangent = [mc.keyTangent(curve, query=True, time=(s, s), outAngle=state, inAngle=not state)[0],
                        mc.keyTangent(curve, query=True, time=(e, e), outAngle=state, inAngle=not state)[0]]
             mc.keyTangent(curve, edit=True, lock=False, time=(e, e),

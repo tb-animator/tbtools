@@ -40,19 +40,21 @@ def make_command_list():
                                 category=cat, command=['import tb_graphEditor as ge',
                                                        'reload(ge)',
                                                        'ge.graphEditor().smart_frame()']))
-    command_list.append(tb_hkey(name='smart_open_graphEditor', annotation='smart framing of keys, and opens the graph editor',
-                                category=cat, command=['import tb_graphEditor as ge',
-                                                       'reload(ge)',
-                                                       'ge.graphEditor().open_graph_editor()']))
+    command_list.append(
+        tb_hkey(name='smart_open_graphEditor', annotation='smart framing of keys, and opens the graph editor',
+                category=cat, command=['import tb_graphEditor as ge',
+                                       'reload(ge)',
+                                       'ge.graphEditor().open_graph_editor()']))
     command_list.append(tb_hkey(name='match_tangent_start_to_end', annotation='',
                                 category=cat, command=['from tb_keyframe import key_mod',
                                                        'key_mod().match(\"start\")']))
     command_list.append(tb_hkey(name='match_tangent_end_to_start', annotation='',
                                 category=cat, command=['from tb_keyframe import key_mod',
                                                        'key_mod().match(\"end\")']))
-    command_list.append(tb_hkey(name='filter_channelBox', annotation='filters the current channelBox seletion in the graph editor',
-                                category=cat, command=['from tb_keyframe import channels',
-                                                       'channels().filterChannels()']))
+    command_list.append(
+        tb_hkey(name='filter_channelBox', annotation='filters the current channelBox seletion in the graph editor',
+                category=cat, command=['from tb_keyframe import channels',
+                                       'channels().filterChannels()']))
 
 
 
@@ -94,33 +96,61 @@ def make_command_list():
                                 category=cat, command=['import tb_isolator as tbi',
                                                        'reload(tbi)',
                                                        'tbi.isolator().toggle_isolate()']))
-    command_list.append(tb_hkey(name='incremental_playblast_quicktime', annotation='incrememnt and save playblasts in mov',
-                                category=cat, command=['import tb_playblast as tbp',
-                                                       'tbp.make_playblast(type="mov")']))
+    command_list.append(
+        tb_hkey(name='incremental_playblast_quicktime', annotation='incrememnt and save playblasts in mov',
+                category=cat, command=['import tb_playblast as tbp',
+                                       'tbp.make_playblast(type="mov")']))
     command_list.append(tb_hkey(name='incremental_playblast_avi', annotation='incrememnt and save playblasts in avi',
                                 category=cat, command=['import tb_playblast as tbp',
                                                        'tbp.make_playblast(type="avi")']))
     command_list.append(tb_hkey(name='toggle_playback_tool',
                                 annotation='does fancy playback toggling',
                                 category=cat, command=['try:',
-                                       '	player.playPause()',
-                                       'except:',
-                                       '	import tb_playback as tbp',
-                                       '	reload(tbp)',
-                                       '	player = tbp.playback()',
-                                       '	player.playPause()',
-                                       ]))
+                                                       '	player.playPause()',
+                                                       'except:',
+                                                       '	import tb_playback as tbp',
+                                                       '	reload(tbp)',
+                                                       '	player = tbp.playback()',
+                                                       '	player.playPause()',
+                                                       ]))
     command_list.append(tb_hkey(name='flip_playback',
                                 annotation='does fancy playback toggling',
                                 category=cat, command=['try:',
-                                       '	player.playPause(flip=True)',
-                                       'except:',
-                                       '	import tb_playback as tbp',
-                                       '	reload(tbp)',
-                                       '	player = tbp.playback()',
-                                       '	player.playPause(flip=True)',
-                                       ]))
-
+                                                       '	player.playPause(flip=True)',
+                                                       'except:',
+                                                       '	import tb_playback as tbp',
+                                                       '	reload(tbp)',
+                                                       '	player = tbp.playback()',
+                                                       '	player.playPause(flip=True)',
+                                                       ]))
+    command_list.append(tb_hkey(name='shift_time_range_start', annotation='',
+                                category=cat, command=['try:',
+                                                       '	timeline().shift_end()',
+                                                       'except:',
+                                                       '	from tb_timeline import timeline',
+                                                       '	timeline().shift_start()',
+                                                       ]))
+    command_list.append(tb_hkey(name='shift_time_range_end', annotation='',
+                                category=cat, command=['try:',
+                                                       '	timeline().shift_end()',
+                                                       'except:',
+                                                       '	from tb_timeline import timeline',
+                                                       '	timeline().shift_end()',
+                                                       ]))
+    command_list.append(tb_hkey(name='crop_time_range_start', annotation='',
+                                category=cat, command=['try:',
+                                                       '	timeline().crop()',
+                                                       'except:',
+                                                       '	from tb_timeline import timeline',
+                                                       '	timeline().crop()',
+                                                       ]))
+    command_list.append(tb_hkey(name='crop_time_range_end', annotation='',
+                                category=cat, command=['try:',
+                                                       '	timeline().crop(start=False)',
+                                                       'except:',
+                                                       '	from tb_timeline import timeline',
+                                                       '	timeline().crop(start=False)',
+                                                       ]))
     # manipulator tools
     cat = 'tbtools_manipulators'
     command_list.append(tb_hkey(name='cycle_rotation', annotation='cycle the rotation mode',
@@ -141,12 +171,12 @@ def make_command_list():
                                                        'tbm.manips().cycle_key_type()']))
     command_list.append(tb_hkey(name='smooth_drag_timeline_on', annotation='timeslider tool with no frame snapping',
                                 category=cat, command=['try:',
-                                       '	my_td.drag(True)',
-                                       'except:',
-                                       '	from tb_timeDragger import timeDragger',
-                                       '	my_td = timeDragger()',
-                                       '	my_td.drag(True)',
-                                       ]))
+                                                       '	my_td.drag(True)',
+                                                       'except:',
+                                                       '	from tb_timeDragger import timeDragger',
+                                                       '	my_td = timeDragger()',
+                                                       '	my_td.drag(True)',
+                                                       ]))
     command_list.append(
         tb_hkey(name='smooth_drag_timeline_off', annotation='set to same hotkey as ON, but tick release',
                 category=cat, command=['try:',
@@ -156,7 +186,6 @@ def make_command_list():
                                        '	my_td = timeDragger()',
                                        '	my_td.drag(False)',
                                        ]))
-
 
     cat = 'tbtools_selection'
     # char set selector

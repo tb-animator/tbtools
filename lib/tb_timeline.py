@@ -105,6 +105,15 @@ class timeline():
         _max = pm.optionVar.get('tb_tl_max', self.get_max())
         return _min, _max
 
+    def crop(self, start=True):
+        if not self.isHighlighted():
+            if start:
+                self.set_min()
+            else:
+                self.set_max()
+        else:
+            self.crop_to_selection()
+
     def info(self):
         print "\ntime control : ", self.time_slider
         print "anim range   : ", self.range

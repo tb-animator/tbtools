@@ -68,12 +68,16 @@ class timeline():
 
     # sets the start frame of playback
     @staticmethod
-    def set_min(time=pm.getCurrentTime()):
+    def set_min(time=""):
+        if not time:
+            time = pm.getCurrentTime()
         pm.playbackOptions(minTime=time)
 
     # sets the end frame of playback
     @staticmethod
-    def set_max(time=pm.getCurrentTime()):
+    def set_max(time=""):
+        if not time:
+            time = pm.getCurrentTime()
         pm.playbackOptions(maxTime=time)
 
     # crops to highlighted range on timeline

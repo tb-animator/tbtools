@@ -323,6 +323,19 @@ class anim_optionWindow(object):
                                                        top_control=rotate_options,
                                                        top_form=_manip_form
                                                        )
+        step_drag_options = tb_UI.checkBox_group().create(label="step drag tool options",
+                                                       parent=_manip_form,
+                                                       variable=timeDragger().step_optionVar,
+                                                       columns=3,
+                                                       optionList=timeDragger().step_modes,
+                                                       intFieldLabel=timeDragger().step_label,
+                                                       intField=timeDragger().step_var,
+                                                       # positionMenu=timeDragger().messagePos,
+                                                       # positionLabel="message position",
+                                                       # messageMenu=True,
+                                                       top_control=time_drag_options,
+                                                       top_form=_manip_form
+                                                       )
 
         tb_UI.FormAttach().attach(_manip_layout, self._form_layout)
 

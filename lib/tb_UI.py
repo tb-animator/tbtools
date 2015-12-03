@@ -3,6 +3,11 @@ import pymel.core as pm
 import tb_messages as tb_msg
 
 
+
+def intEntered(name, *args):
+    pm.optionVar(intValue=(str(name), args[0]))
+
+
 class folder_picker():
     def __init__(self):
         self.main_layout = pm.formLayout()
@@ -176,8 +181,9 @@ class checkBox_group():
                 if name in vars:
                     pm.optionVar(removeFromArray=(variable, vars.index(name)))
 
+
     def create(self, parent="", label="", columns=3, optionList=[], variable="", positionMenu="", positionLabel="",
-               messageMenu="", top_form="", top_control=""):
+               messageMenu="", top_form="", top_control="", intField="", intFieldLabel=""):
         pm.formLayout(self.main_layout, edit=True, parent=parent)
         pm.text(self.label, edit=True, label=label)
         if positionMenu:
@@ -198,6 +204,13 @@ class checkBox_group():
             self.cBox()._optionCheckBox(variable=variable,
                                         name=options,
                                         label=options)
+        if intField:
+            pm.text(label=intFieldLabel)
+            pm.intField(parent=self.layout,
+                        width=64,
+                        value=pm.optionVar.get(intField, 2),
+                        changeCommand=lambda *args: intEntered(intField, args[0]))
+
 
         # spacer
         pm.text(label="", parent=cLayout)

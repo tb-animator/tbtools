@@ -54,5 +54,5 @@ class about_win():
         layout = pm.columnLayout(adjustableColumn=True )
         pm.text(font="boldLabelFont",label="Version : %s" % self.version)
 
-        pm.button( label='Close', command=('cmds.deleteUI(\"' + window + '\", window=True)') , parent=layout)
+        pm.button(label='Close', command=('cmds.deleteUI(\"' + window + '\", window=True)'), parent=layout)
         pm.showWindow(window)

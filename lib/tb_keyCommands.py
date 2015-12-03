@@ -186,7 +186,23 @@ def make_command_list():
                                        '	my_td = timeDragger()',
                                        '	my_td.drag(False)',
                                        ]))
-
+    command_list.append(tb_hkey(name='step_drag_timeline_on', annotation='timeslider tool with no frame snapping',
+                                category=cat, command=['try:',
+                                                       '	my_td.stepDrag(True)',
+                                                       'except:',
+                                                       '	from tb_timeDragger import timeDragger',
+                                                       '	my_td = timeDragger()',
+                                                       '	my_td.stepDrag()',
+                                                       ]))
+    command_list.append(
+        tb_hkey(name='step_drag_timeline_off', annotation='set to same hotkey as ON, but tick release',
+                category=cat, command=['try:',
+                                       '	my_td.stepDrag(False)',
+                                       'except:',
+                                       '	from tb_timeDragger import timeDragger',
+                                       '	my_td = timeDragger()',
+                                       '	my_td.stepDrag(state=False)',
+                                       ]))
     cat = 'tbtools_selection'
     # char set selector
     command_list.append(tb_hkey(name='select_character_set_objs', annotation='',

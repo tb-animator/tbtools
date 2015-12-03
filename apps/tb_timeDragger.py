@@ -14,7 +14,7 @@ try:
     from tb_timeline import timeline
 except ImportError:
     webbrowser.open('http://tb-animator.blogspot.co.uk/p/hello.html')
-    print "please install the tbtools module, it's useful!"
+    print "please install the tbtools module, it's useful! and required to run this script"
 
 class timeDragger():
     def __init__(self):
@@ -103,7 +103,8 @@ class timeDragger():
     def stepDrag(self, state=True):
         if state:
             try:
-                self.evaluate_mode = cmds.evaluationManager(query=True, mode=True)
+                # disable the parallel processing (crashes a lot in 2016)
+                self.evaluate_mode = cmds.evaluationManager(mode='off')
             except:
                 pass
             self.step = pm.optionVar.get(self.step_var, 2)

@@ -125,7 +125,7 @@ def make_command_list():
                                                        ]))
     command_list.append(tb_hkey(name='shift_time_range_start', annotation='',
                                 category=cat, command=['try:',
-                                                       '	timeline().shift_end()',
+                                                       '	timeline().shift_start()',
                                                        'except:',
                                                        '	from tb_timeline import timeline',
                                                        '	timeline().shift_start()',

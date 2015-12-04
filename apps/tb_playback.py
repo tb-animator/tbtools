@@ -32,6 +32,7 @@ class playback():
     def __init__(self):
         self.playback_state = pm.play(query=True, state=True)
         self.timeline = tl.timeline()
+        self.cropped = False
         print self.timeline.info()
 
     def get_flip_frames(self):
@@ -44,18 +45,21 @@ class playback():
         # currently playing, so reset any time range
         print "play state", self.isPlaying()
         if self.isPlaying():
-            if self.timeline.cached_range:
+            if self.cropped:
                 self.timeline.set_min(time=self.timeline.cached_range[0])
                 self.timeline.set_max(time=self.timeline.cached_range[1])
-            pm.playbackOptions(query=True,playbackSpeed=1)
+                self.cropped = False
+            # pm.playbackOptions(query=True, playbackSpeed=1)
         # not currently playing
         else:
             # store the current playback range
             self.timeline.cached_range = self.timeline.cache_range()
+            print "playing"
+            print self.timeline.cached_range
             # not playing, crop the timeline if there is a highlighted selection
             if self.timeline.isHighlighted():
                 print "should crop before playing"
-
+                self.cropped = True
                 pm.setCurrentTime(self.timeline.get_highlighted_range(min=True))
                 self.timeline.set_min(time=self.timeline.get_highlighted_range(min=True))
                 self.timeline.set_max(time=self.timeline.get_highlighted_range(max=True))
@@ -63,6 +67,5 @@ class playback():
                 pm.setCurrentTime(self.timeline.get_highlighted_range(min=True))
                 self.timeline.set_min(time=self.timeline.get_highlighted_range(min=True))
                 self.timeline.set_max(time=self.timeline.get_highlighted_range(min=True)+self.get_flip_frames())
-
 
         pm.play(state=not self.isPlaying())

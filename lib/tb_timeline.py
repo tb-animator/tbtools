@@ -68,15 +68,16 @@ class timeline():
 
     # sets the start frame of playback
     @staticmethod
-    def set_min(time=""):
-        if not time:
+    def set_min(time=None):
+        if time == None:
+            print "no time specified? setting to c"
             time = pm.getCurrentTime()
         pm.playbackOptions(minTime=time)
 
     # sets the end frame of playback
     @staticmethod
-    def set_max(time=""):
-        if not time:
+    def set_max(time=None):
+        if time == None:
             time = pm.getCurrentTime()
         pm.playbackOptions(maxTime=time)
 

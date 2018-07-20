@@ -21,6 +21,8 @@ class module_maker():
         self.module_file = 'tbtools.mod'
         self.module_template = os.path.join(self.filepath, self.module_file)
         self.maya_module_dir = pm.internalVar(userAppDir=True) + "modules\\"
+        self.current_module_data = None
+        self.module_path = os.path.join(self.maya_module_dir, self.module_file)
         if not os.path.isdir(self.maya_module_dir):
             print "making maya module folder"
             os.mkdir(self.maya_module_dir)
@@ -37,6 +39,7 @@ class module_maker():
         return module_path
 
     def make_module_data(self):
+        self.out_lines = ['\n']
         self.out_lines.append(self.make_module_path())
         for paths in self.python_paths:
             self.out_lines.append('PYTHONPATH+:='+paths)
@@ -45,22 +48,32 @@ class module_maker():
         for paths in self.xbmlang_paths:
             self.out_lines.append('XBMLANGPATH+:='+paths)
 
-
     def write_module_file(self):
-        self.make_module_data()
+        self.read_module_file()
         mod_file = self.maya_module_dir + "\\" + self.module_file
         shutil.copyfile(self.module_template, mod_file)
 
         if os.access(os.path.join(self.maya_module_dir, self.module_file), os.W_OK):
-            self.replace_path(mod_file, 'C:\\Users\\userName\\Documents\\maya\\tbtools\\' , self.filepath)
-            return True
-            '''
-            with io.open(file, 'w') as f:
-                f.writelines(line + u'\n' for line in self.out_lines)
+            with io.open(mod_file, 'w') as f:
+                f.writelines(line + u'\n' for line in self.current_module_data)
                 return True
-            '''
         else:
             return False
+
+    def read_module_file(self):
+        if os.path.isfile(self.module_path):
+            f = open(self.module_path, 'r')
+            self.current_module_data = f.read().splitlines()
+            match = False
+            f.close()
+            for lineIndex, line in enumerate(self.current_module_data):
+                if 'PLATFORM:%s' % self.win_versions  and 'MAYAVERSION:%s' % self.maya_version in line:
+                    match = True
+                    self.current_module_data[lineIndex] = self.make_module_path()
+            if not match:
+                # create a new entry
+                self.make_module_data()
+                self.current_module_data.extend(self.out_lines)
 
     def replace_path(self, fileName, path, newpath):
         f = open(fileName,'r')
@@ -69,10 +82,9 @@ class module_maker():
 
         newdata = filedata.replace(path, newpath)
 
-        f = open(fileName,'w')
+        f = open(fileName, 'w')
         f.write(newdata)
         f.close()
-
 
     def check_module_file(self):
         full_path = os.path.join(self.maya_module_dir, self.module_file)
@@ -105,7 +117,6 @@ class module_maker():
                          fade=True)
         pm.optionVar(intValue=("inViewMessageEnable", message_state))
 
-
     def result_window(self):
         if pm.window("installWin", exists=True):
             pm.deleteUI("installWin")
@@ -119,4 +130,4 @@ class module_maker():
         pm.setParent( '..' )
         pm.showWindow( window )
 
-module_maker().install()
+# module_maker().install()

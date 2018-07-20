@@ -130,4 +130,4 @@ class module_maker():
         pm.setParent( '..' )
         pm.showWindow( window )
 
-# module_maker().install()
+module_maker().install()

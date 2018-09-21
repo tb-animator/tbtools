@@ -21,13 +21,13 @@ class module_maker():
         self.module_file = 'tbtools.mod'
         self.module_template = os.path.join(self.filepath, self.module_file)
         self.maya_module_dir = pm.internalVar(userAppDir=True) + "modules\\"
-        self.current_module_data = None
-        self.module_path = os.path.join(self.maya_module_dir, self.module_file)
         if not os.path.isdir(self.maya_module_dir):
             print "making maya module folder"
             os.mkdir(self.maya_module_dir)
         else:
             os.chmod(self.maya_module_dir, stat.S_IWRITE)
+        self.current_module_data = None
+        self.module_path = os.path.join(self.maya_module_dir, self.module_file)
 
     def make_module_path(self):
         module_path = '+ PLATFORM:' \
@@ -61,6 +61,7 @@ class module_maker():
             return False
 
     def read_module_file(self):
+        print 'read_module_file'
         if os.path.isfile(self.module_path):
             f = open(self.module_path, 'r')
             self.current_module_data = f.read().splitlines()
@@ -72,7 +73,9 @@ class module_maker():
                     self.current_module_data[lineIndex] = self.make_module_path()
             if not match:
                 # create a new entry
+                print 'making new entry'
                 self.make_module_data()
+                print 'current_module_data', self.current_module_data
                 self.current_module_data.extend(self.out_lines)
 
     def replace_path(self, fileName, path, newpath):
@@ -126,8 +129,8 @@ class module_maker():
         pm.text(label="")
         pm.text(label="please restart maya for everything to load")
 
-        pm.button( label='Close', command=('cmds.deleteUI(\"' + window + '\", window=True)') , parent=layout)
-        pm.setParent( '..' )
-        pm.showWindow( window )
+        pm.button( label='Close', command=('cmds.deleteUI(\"' + window + '\", window=True)'), parent=layout)
+        pm.setParent('..')
+        pm.showWindow(window)
 
 module_maker().install()

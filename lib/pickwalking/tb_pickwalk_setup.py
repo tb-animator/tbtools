@@ -11,9 +11,11 @@ class pickInfo():
         self.left = left
         self.right = right
 
+
 def get_sides(side=""):
-    sides = { "left" : ["l_","r_"], "right" : ["r_", "l_"] }
+    sides = {"left": ["l_", "r_"], "right": ["r_", "l_"]}
     return sides.get(side, "")
+
 
 def setup_pickwalking(pickList=[]):
     for picks in pickList:

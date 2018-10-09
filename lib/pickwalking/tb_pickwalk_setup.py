@@ -1,7 +1,8 @@
 import pymel.core as pm
 from tb_objectInfo import Attributes
+# wakka waka
+__author__ = 'Tom Bailey'
 
-__author__ = 'Tom'
 # pickwalk data object
 class pickInfo():
     def __init__(self, control="", up="", down="", left="", right=""):

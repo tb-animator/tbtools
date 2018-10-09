@@ -6,6 +6,13 @@ import os, stat
 import pickle
 import tb_messages as message
 
+
+def select_all_non_referenced_curves():
+    cmds.select([curve for curve in cmds.ls(type=["animCurveTL", "animCurveTU", "animCurveTA", "animCurveTT"]) if
+                 not cmds.referenceQuery(curve, isNodeReferenced=True) and not
+                 cmds.lockNode(curve, query=True, lock=True)[0]], replace=True)
+
+    
 # selects all nodes in a character set
 def select_cheracter_set():
     selection = pm.ls(selection=True)
@@ -301,6 +308,10 @@ class quick_selection():
 
     def qs_select(self):
         if self.selection:
+            for s in self.selection:
+                if cmds.objectType(s) == 'objectSet':
+                    cmds.select(s, add=True)
+                    cmds.select(s, deselect=True, noExpand=True)
             if self.all_sets:
                 for a_set in self.all_sets:
                     qs_result = self.check_set_membership(self.selection, a_set)

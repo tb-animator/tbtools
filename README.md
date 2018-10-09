@@ -15,7 +15,7 @@ edit the file paths to reflect your user directory,eg.
   
 when you load maya, in the script editor you should see
 ****************************************************************
-ttb-tools module loading\n"
+tb-tools module loading\n"
 ****************************************************************
 
 joy!

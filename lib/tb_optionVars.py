@@ -23,16 +23,15 @@ class optionVar_utils():
         optionVar_list = pm.optionVar.get(option_name, [default])
         if not optionVar_list:
             optionVar_list = [default]
-        print optionVar_list
         # find the current index in the full list
-        current_name = full_list[current]
-        print current_name
-        print
+        if current < len(full_list):
+            current_name = full_list[current]
+        else:
+            current_name = full_list[0]
 
         # check if the current name is in our option var list
         if current_name in optionVar_list:
             index = optionVar_list.index(current_name) + 1
-            print "index", index
             # loop around the list
             name = optionVar_list[index % len(optionVar_list)]
 
@@ -40,7 +39,6 @@ class optionVar_utils():
             print "current value not in option var list, set to first"
             name = optionVar_list[0]
         index = full_list.index(name)
-        print name, index
         return index, name
 
 

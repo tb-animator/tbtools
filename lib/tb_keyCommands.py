@@ -145,7 +145,7 @@ def make_command_list():
                                 category=cat, command=['try:',
                                                        '    tumbler.doIt()',
                                                        'except:',
-                                                       '    import cameraTools.cameraCOI as COI',
+                                                       '    import cameraTools.cameraTumbler as COI',
                                                        '    reload(COI)',
                                                        '    tumbler = COI.tumbler()',
                                                        '    tumbler.doIt()',

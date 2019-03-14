@@ -8,8 +8,6 @@ import tb_keyCommands as tb_hotKeys
 import apps.mayaMod.mayaModLoader as mml
 import updater as upd
 reload(tb_hotKeys)
-import cameraTools.cameraCOI as COI
-reload(COI)
 import maya.mel as mel
 
 

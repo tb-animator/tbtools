@@ -21,6 +21,9 @@ class optionVar_utils():
     def cycleOption(option_name="", full_list=[], current=int(), default=""):
         # get list from optionvar array
         optionVar_list = pm.optionVar.get(option_name, [default])
+        print 'optionlist', optionVar_list, current
+        print 'full_list', full_list
+        print 'rotateMode', pm.manipRotateContext('Rotate', query=True, mode=True)
         if not optionVar_list:
             optionVar_list = [default]
         # find the current index in the full list

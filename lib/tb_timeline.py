@@ -123,3 +123,9 @@ class timeline():
         print "\ntime control : ", self.time_slider
         print "anim range   : ", self.range
         print "highlight    : ", self.highlight
+
+def skip(mode=-1):
+    amount = pm.optionVar.get('tb_skip', 5)
+    pm.currentTime(amount * mode + pm.getCurrentTime())
+
+    pm.optionVar(intValue=('tb_skip', amount))

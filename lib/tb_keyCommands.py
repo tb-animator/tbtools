@@ -35,7 +35,39 @@ def make_command_list():
     command_list = []
 
     # keyframing tools
+    cat = 'tbtools_importExport'
+    command_list.append(tb_hkey(name='mocapImporter', annotation='mocap import window',
+                            category=cat, command=['import rig.mocapLinker.mocapImporter as mi',
+                                                   'reload(mi)',
+                                                   'mWindow = mi.mocapWindow(mi.mayaMainWindow())',
+                                                   'mWindow.show()']))
     cat = 'tbtools_keyframing'
+
+    command_list.append(tb_hkey(name='lazy_cycle_anim', annotation='lazy_cycle_maker',
+                                category=cat, command=['import animCycle.tb_cycler as tbs',
+                                                       'reload(tbs)',
+                                                       'tbs.cycler().go()']))
+    command_list.append(tb_hkey(name='store_ctrl_transform', annotation='store object transform',
+                                category=cat, command=['from tb_snaps import SnapTools',
+                                                       'SnapTools().store_transform()']))
+    command_list.append(tb_hkey(name='restore_ctrl_transform', annotation='restore object transform',
+                                category=cat, command=['from tb_snaps import SnapTools',
+                                                       'SnapTools().restore_transform()']))
+    command_list.append(tb_hkey(name='snap_objects', annotation='snap selection',
+                                category=cat, command=['from tb_snaps import SnapTools',
+                                                       'SnapTools().snap_selection()']))
+    command_list.append(tb_hkey(name='zero_translates', annotation='zero translation values',
+                                category=cat, command=['import tb_manipulators as tbm',
+                                                       'reload(tbm)',
+                                                       'tbm.zeroes().zero_translates()']))
+    command_list.append(tb_hkey(name='zero_rotates', annotation='zero rotation values',
+                                category=cat, command=['import tb_manipulators as tbm',
+                                                       'reload(tbm)',
+                                                       'tbm.zeroes().zero_rotates()']))
+    command_list.append(tb_hkey(name='zero_scales', annotation='zero scale values',
+                                category=cat, command=['import tb_manipulators as tbm',
+                                                       'reload(tbm)',
+                                                       'tbm.zeroes().zero_scales()']))
     command_list.append(tb_hkey(name='smart_frame_curves', annotation='smart framing of keys, or focus on selection',
                                 category=cat, command=['import tb_graphEditor as ge',
                                                        'reload(ge)',
@@ -55,7 +87,37 @@ def make_command_list():
         tb_hkey(name='filter_channelBox', annotation='filters the current channelBox seletion in the graph editor',
                 category=cat, command=['from tb_keyframe import channels',
                                        'channels().filterChannels()']))
-
+    # push and pull
+    command_list.append(
+        tb_hkey(name='tb_pull_left', annotation='scale values down, from left',
+                category=cat, command=['import tb_keyMod as tbkm',
+                                       'reload(tbkm)',
+                                       'tbkm.keyTools().push_and_pull(\"pull\", \"left\")']))
+    command_list.append(
+        tb_hkey(name='tb_pull_right', annotation='scale values down, from left',
+                category=cat, command=['import tb_keyMod as tbkm',
+                                       'reload(tbkm)',
+                                       'tbkm.keyTools().push_and_pull(\"pull\", \"right\")']))
+    command_list.append(
+        tb_hkey(name='tb_push_left', annotation='scale values down, from left',
+                category=cat, command=['import tb_keyMod as tbkm',
+                                       'reload(tbkm)',
+                                       'tbkm.keyTools().push_and_pull(\"push\", \"left\")']))
+    command_list.append(
+        tb_hkey(name='tb_push_right', annotation='scale values down, from right',
+                category=cat, command=['import tb_keyMod as tbkm',
+                                       'reload(tbkm)',
+                                       'tbkm.keyTools().push_and_pull(\"push\", \"right\")']))
+    command_list.append(
+        tb_hkey(name='tb_negate_left', annotation='flip values, from left',
+                category=cat, command=['import tb_keyMod as tbkm',
+                                       'reload(tbkm)',
+                                       'tbkm.keyTools().negate_keys(\"left\")']))
+    command_list.append(
+        tb_hkey(name='tb_negate_right', annotation='flip values, from right',
+                category=cat, command=['import tb_keyMod as tbkm',
+                                       'reload(tbkm)',
+                                       'tbkm.keyTools().negate_keys(\"right\")']))
 
 
     # camera tools
@@ -76,10 +138,26 @@ def make_command_list():
                                 category=cat, command=['import tb_trackingCam as tc',
                                                        'reload (tc)',
                                                        'tc.track(\"persp\")']))
-
+    command_list.append(tb_hkey(name='updateTumble', annotation='update the camera tumble pivots',
+                                category=cat, command=['try:',
+                                                       '    tumbler.doIt()',
+                                                       'except:',
+                                                       '    import cameraTools.cameraCOI as COI',
+                                                       '    reload(COI)',
+                                                       '    tumbler = COI.tumbler()',
+                                                       '    tumbler.doIt()',
+                                                       ]))
 
     # viewport tools
     cat = 'tbtools_view'
+    command_list.append(tb_hkey(name='ViewMode_xray_joints', annotation='',
+                                category=cat, command=['import tb_viewModes as vm',
+                                                       'reload (vm)',
+                                                       'vm.toggleXrayJoints()']))
+    command_list.append(tb_hkey(name='ViewMode_xray', annotation='',
+                            category=cat, command=['import tb_viewModes as vm',
+                                                   'reload (vm)',
+                                                   'vm.toggleXray()']))
     command_list.append(tb_hkey(name='ViewMode_Objects_Joints', annotation='',
                                 category=cat, command=['import tb_viewModes as vm',
                                                        'reload (vm)',
@@ -112,6 +190,16 @@ def make_command_list():
                                                        '	reload(tbp)',
                                                        '	player = tbp.playback()',
                                                        '	player.playPause()',
+                                                       ]))
+    command_list.append(tb_hkey(name='toggle_playback_viewport',
+                                annotation='does fancy playback toggling viewport modes',
+                                category=cat, command=['try:',
+                                                       '	player.toggleAll()',
+                                                       'except:',
+                                                       '	import tb_playback as tbp',
+                                                       '	reload(tbp)',
+                                                       '	player = tbp.playback()',
+                                                       '	player.toggleAll()',
                                                        ]))
     command_list.append(tb_hkey(name='flip_playback',
                                 annotation='does fancy playback toggling',
@@ -151,6 +239,55 @@ def make_command_list():
                                                        '	from tb_timeline import timeline',
                                                        '	timeline().crop(start=False)',
                                                        ]))
+    command_list.append(tb_hkey(name='skip_forward', annotation='',
+                                category=cat, command=['import tb_timeline as tbt',
+                                                       'reload(tbt)',
+                                                       'tbt.skip(mode=1)'
+                                                       ]))
+    command_list.append(tb_hkey(name='skip_backward', annotation='',
+                                category=cat, command=['import tb_timeline as tbt',
+                                                       'reload(tbt)',
+                                                       'tbt.skip(mode=-1)'
+                                                       ]))
+    # constraint/bake tools
+    cat = 'tbtools_constraints'
+    command_list.append(tb_hkey(name='bakeToLocator', annotation='constrain to object to locator',
+                                category=cat, command=['import cake.ezBake as ezb',
+                                                       'reload(ezb)',
+                                                       'ezb.bake_to_locator(constrain=True, orientOnly=False)']))
+    command_list.append(tb_hkey(name='bakeToLocatorRotation', annotation='constrain to object to locator',
+                                category=cat, command=['import cake.ezBake as ezb',
+                                                       'reload(ezb)',
+                                                       'ezb.bake_to_locator(constrain=True, orientOnly=True)']))
+    command_list.append(tb_hkey(name='simpleConstraintOffset', annotation='constrain to objects with offset',
+                                category=cat, command=['import cake.ezBake as ezb',
+                                                       'reload(ezb)',
+                                                       'ezb.parentConst(constrainGroup=False, offset=True, postBake=False)']))
+    command_list.append(tb_hkey(name='simpleConstraintNoOffset', annotation='constrain to objects with NO offset',
+                                category=cat, command=['import cake.ezBake as ezb',
+                                                       'reload(ezb)',
+                                                       'ezb.parentConst(constrainGroup=False, offset=False, postBake=False)']))
+    command_list.append(
+        tb_hkey(name='simpleConstraintOffsetPostBake', annotation='constrain to objects with offset - post baked',
+                category=cat, command=['import cake.ezBake as ezb',
+                                       'reload(ezb)',
+                                       'ezb.parentConst(constrainGroup=False, offset=True, postBake=True)']))
+    command_list.append(
+        tb_hkey(name='simpleConstraintNoOffsetPostBake', annotation='constrain to objects with NO offset - post baked',
+                category=cat, command=['import cake.ezBake as ezb',
+                                       'reload(ezb)',
+                                       'ezb.parentConst(constrainGroup=False, offset=False, postBake=True)']))
+    command_list.append(tb_hkey(name='simpleConstraintOffsetPostBakeReverse',
+                                annotation='constrain to objects with offset - post baked, constraint reversed',
+                                category=cat, command=['import cake.ezBake as ezb',
+                                                       'reload(ezb)',
+                                                       'ezb.parentConst(constrainGroup=False, offset=True, postBake=True, postReverseConst=True)']))
+    command_list.append(tb_hkey(name='simpleConstraintNoOffsetPostBakeReverse',
+                                annotation='constrain to objects with NO offset - post baked, constraint reversed',
+                                category=cat, command=['import cake.ezBake as ezb',
+                                                       'reload(ezb)',
+                                                       'ezb.parentConst(constrainGroup=False, offset=False, postBake=True, postReverseConst=True)']))
+
     # manipulator tools
     cat = 'tbtools_manipulators'
     command_list.append(tb_hkey(name='cycle_rotation', annotation='cycle the rotation mode',
@@ -204,6 +341,11 @@ def make_command_list():
                                        '	my_td.stepDrag(state=False)',
                                        ]))
     cat = 'tbtools_selection'
+    # all curve selector
+    command_list.append(tb_hkey(name='select_all_anim_curves', annotation='',
+                                category=cat, command=['import tb_selections as tb_sel',
+                                                       'reload (tb_sel)',
+                                                       'tb_sel.select_all_non_referenced_curves()']))
     # char set selector
     command_list.append(tb_hkey(name='select_character_set_objs', annotation='',
                                 category=cat, command=['import tb_selections as tb_sel',
@@ -261,6 +403,7 @@ class hotkey_tool():
                            'tbtools_view',
                            'tbtools_keyframing',
                            'tbtools_cameras',
+                           'tbtools_constraints',
                            'tbtools_manipulators',
                            'tbtools_selection']
         self.command_list = make_command_list()

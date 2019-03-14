@@ -42,7 +42,10 @@ def make_command_list():
                                                    'mWindow = mi.mocapWindow(mi.mayaMainWindow())',
                                                    'mWindow.show()']))
     cat = 'tbtools_keyframing'
-
+    command_list.append(tb_hkey(name='flatten_control', annotation='flattens the control out',
+                                category=cat, command=['import tb_flatten as tbf',
+                                                       'reload(tbf)',
+                                                       'tbf.level()']))
     command_list.append(tb_hkey(name='lazy_cycle_anim', annotation='lazy_cycle_maker',
                                 category=cat, command=['import animCycle.tb_cycler as tbs',
                                                        'reload(tbs)',

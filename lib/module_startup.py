@@ -5,7 +5,7 @@ import tb_optionVars as tbo
 import pymel.core as pm
 import maya.api.OpenMaya as Om
 import tb_keyCommands as tb_hotKeys
-import apps.mayaMod.mayaModLoader as mml
+#import apps.mayaMod.mayaModLoader as mml
 import updater as upd
 reload(tb_hotKeys)
 import maya.mel as mel
@@ -36,9 +36,9 @@ class initialise():
         mutils.executeDeferred('import tb_graphEditor as ge;ge.graphEditor().add_graph_editor_callback()')
 
         # load dag menu edit
-        mutils.executeDeferred('import apps.mayaMod.mayaModLoader as mml;mml.customDagLoader().load()')
-        mutils.executeDeferred('mel.eval(\'scriptJob -conditionTrue \"SomethingSelected\" updateTumble\')')
-        mutils.executeDeferred('mel.eval(\'scriptJob -event \"DragRelease\" updateTumble\')')
-        mutils.executeDeferred('mel.eval(\'scriptJob -event \"ModelPanelSetFocus\" updateTumble\')')
-        mutils.executeDeferred('mel.eval(\'scriptJob -event \"playbackModeChanged\" updateTumble\')')
-        Om.MSceneMessage.addCallback(6, self.dagLoad)
+        #mutils.executeDeferred('import apps.mayaMod.mayaModLoader as mml;mml.customDagLoader().load()')
+        #mutils.executeDeferred('mel.eval(\'scriptJob -conditionTrue \"SomethingSelected\" updateTumble\')')
+        #mutils.executeDeferred('mel.eval(\'scriptJob -event \"DragRelease\" updateTumble\')')
+        #mutils.executeDeferred('mel.eval(\'scriptJob -event \"ModelPanelSetFocus\" updateTumble\')')
+        #mutils.executeDeferred('mel.eval(\'scriptJob -event \"playbackModeChanged\" updateTumble\')')
+        #Om.MSceneMessage.addCallback(6, self.dagLoad)

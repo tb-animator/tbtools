@@ -157,5 +157,4 @@ class module_maker():
         pm.setParent('..')
         pm.showWindow(window)
 
-print 'whatever'
 module_maker().install()

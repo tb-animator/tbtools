@@ -36,6 +36,7 @@ if not pm.optionVar(exists='playblast_folder'):
 
 
 def buttonPressed(name, *args):
+    print 'button?'
     if args[0]:
         _val = 1
     else:
@@ -186,7 +187,8 @@ class anim_optionWindow(object):
                 attachForm=af
             )
 
-    def category_selected(self, _name):
+    def category_selected(self, _name, *args):
+        print 'category selected?', _name
         current = self.categories[_name]
         for keys in self.categories:
             pm.frameLayout(self.categories[keys], edit=True, manage=(keys == _name))
@@ -203,7 +205,7 @@ class anim_optionWindow(object):
         _checkBox = pm.checkBox(_name, label=_label,
                                 value=optionVar(query=_name),
                                 annotation=_annotation,
-                                changeCommand=lambda *args: checkBox_pressed(_name, args[0])
+                                changeCommand=lambda *args: checkBox_pressed(_name)
                                 )
         return _checkBox
 
@@ -213,7 +215,7 @@ class anim_optionWindow(object):
                                   parent=parent,
                                   width=width,
                                   height=height,
-                                  command=lambda *args: self.category_selected(name)
+                                  command=lambda *args: self.category_selected(name, args[0])
                                   )
         return _button
 
@@ -247,7 +249,6 @@ class anim_optionWindow(object):
             edit=True,
             attachForm=af
         )
-
 
     def _menu_category(self, _parent):
         self._cat_layout = pm.columnLayout()
@@ -338,7 +339,6 @@ class anim_optionWindow(object):
                                                        )
 
         tb_UI.FormAttach().attach(_manip_layout, self._form_layout)
-
 
         pm.setParent(_parent)
         self.categories["manips_op"] = _manip_layout

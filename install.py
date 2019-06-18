@@ -20,16 +20,15 @@ class module_maker():
         self.out_lines = []
         self.module_file = 'tbtools.mod'
         self.module_template = os.path.join(self.filepath, self.module_file)
-        self.maya_module_dir = pm.internalVar(userAppDir=True) + "modules\\"
-        if not os.path.isdir(self.maya_module_dir):
-            print "making maya module folder"
-            os.mkdir(self.maya_module_dir)
-        else:
-            os.chmod(self.maya_module_dir, stat.S_IWRITE)
         self.current_module_data = None
-        self.module_path = os.path.join(self.maya_module_dir, self.module_file)
 
-    def make_module_path(self):
+    def maya_module_dir(self):
+        return os.path.join(pm.internalVar(userAppDir=True) + "modules\\")
+
+    def module_path(self):
+        return os.path.join(self.maya_module_dir(), self.module_file)
+
+    def make_module_path_data(self):
         module_path = '+ PLATFORM:' \
                       + self.win_versions \
                       + ' MAYAVERSION:' \
@@ -40,7 +39,7 @@ class module_maker():
 
     def make_module_data(self):
         self.out_lines = ['\n']
-        self.out_lines.append(self.make_module_path())
+        self.out_lines.append(self.make_module_path_data())
         for paths in self.python_paths:
             self.out_lines.append('PYTHONPATH+:='+paths)
         for paths in self.maya_script_paths:
@@ -50,33 +49,36 @@ class module_maker():
 
     def write_module_file(self):
         self.read_module_file()
-        mod_file = self.maya_module_dir + "\\" + self.module_file
-        shutil.copyfile(self.module_template, mod_file)
-
-        if os.access(os.path.join(self.maya_module_dir, self.module_file), os.W_OK):
-            with io.open(mod_file, 'w') as f:
+        # mod_file = self.maya_module_dir + "\\" + self.module_file
+        # shutil.copyfile(self.module_template, mod_file)
+        if not self.current_module_data:
+            return cmds.error('no module data to write')
+        if os.access(os.path.join(self.module_path()), os.W_OK):
+            with io.open(self.module_path(), 'w') as f:
                 f.writelines(line + u'\n' for line in self.current_module_data)
                 return True
+                io.close(self.module_path())
         else:
             return False
 
     def read_module_file(self):
         print 'read_module_file'
-        if os.path.isfile(self.module_path):
-            f = open(self.module_path, 'r')
+        if os.path.isfile(self.module_path()):
+            f = open(self.module_path(), 'r')
             self.current_module_data = f.read().splitlines()
             match = False
             f.close()
             for lineIndex, line in enumerate(self.current_module_data):
-                if 'PLATFORM:%s' % self.win_versions  and 'MAYAVERSION:%s' % self.maya_version in line:
+                if 'PLATFORM:%s' % self.win_versions and 'MAYAVERSION:%s' % self.maya_version in line:
                     match = True
-                    self.current_module_data[lineIndex] = self.make_module_path()
+                    self.current_module_data[lineIndex] = self.make_module_path_data()
             if not match:
                 # create a new entry
                 print 'making new entry'
                 self.make_module_data()
                 print 'current_module_data', self.current_module_data
                 self.current_module_data.extend(self.out_lines)
+                print self.current_module_data
 
     def replace_path(self, fileName, path, newpath):
         f = open(fileName,'r')
@@ -90,23 +92,45 @@ class module_maker():
         f.close()
 
     def check_module_file(self):
-        full_path = os.path.join(self.maya_module_dir, self.module_file)
-        print full_path
-        if os.path.isfile(os.path.join(self.maya_module_dir, self.module_file)):
-            os.chmod(full_path, stat.S_IWRITE)
-            return True
-        else:
+        # file doesn't exist yet so create one
+        print 'checking module file'
+
+        if not os.path.isfile(self.module_path()):
+            print self.module_path(), 'not found, creating it'
+            f = open(str(self.module_path()), 'a+')  # open file in append mode
+            f.writelines('')
+            f.close()
+        if os.path.isfile(self.module_path()):
+            os.chmod(self.module_path(), stat.S_IWRITE)
             return False
+        else:
+            return True
+
+    def make_module_folder(self):
+        print 'make_module_folder'
+        if not os.path.isdir(self.maya_module_dir()):
+            print "making new maya module folder"
+            os.mkdir(self.maya_module_dir())
+        else:
+            print "setting module folder to writeable"
+            os.chmod(self.maya_module_dir(), stat.S_IWRITE)
 
     def install(self):
-        result_message = "<h3>Installation result</h3>\t\n"
-        if not self.write_module_file():
-            result_message += "<span style=\""+self.colours['red']+"\">Failed to get access to module file</span>"
+        print 'install'
+        # create module folder if not existing
+        self.make_module_folder()
 
-        if self.check_module_file():
+        # create module file if not existing
+        state = self.check_module_file()
+
+        self.write_module_file()
+
+        result_message = "<h3>Installation result</h3>\t\n"
+
+        if not state:
             result_message += "module file created <span style=\""+self.colours['green']+ "\">Successfully</span> \n"
             result_message += "module file location <span style=\""+self.colours['yellow']+ "\">" \
-                              + os.path.join(self.maya_module_dir, self.module_file) + "</span>\n\nEnjoy!"
+                              + self.module_path() + "</span>\n\nEnjoy!"
             self.result_window()
         else:
             result_message += "<span style=\""+self.colours['red']+"<h3>WARNING</h3></span> :module file not created\n"
@@ -133,4 +157,5 @@ class module_maker():
         pm.setParent('..')
         pm.showWindow(window)
 
+print 'whatever'
 module_maker().install()

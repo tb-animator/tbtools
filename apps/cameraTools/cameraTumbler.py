@@ -1,5 +1,6 @@
 __author__ = 'tom.bailey'
 import pymel.core as pm
+import maya.cmds as cmds
 
 from tb_decorators import decorator
 from tb_units import unit_conversion
@@ -8,47 +9,58 @@ from tb_units import unit_conversion
 
 global cTumbler
 
+def midPoint(pointArray):
+    midPoint = [0, 0, 0]
+
+    # Get Center Point
+    total = len(pointArray)
+    for point in pointArray:
+        midPoint = [midPoint[0] + point[0], midPoint[1] + point[1], midPoint[2] + point[2]]
+
+    # Calculate Average Position
+    midPoint = [midPoint[0] / total, midPoint[1] / total, midPoint[2] / total]
+
+    # Return Result
+    return midPoint
+
+def getPivot(obj):
+    return cmds.xform(obj, query=True, rotatePivot=True, worldSpace=True)
+
+def get_bounding_box_centre(objects):
+    box = cmds.exactWorldBoundingBox(objects)  #Do standard BB computation
+    x = ((box[0] + box[3]) / 2)
+    y = ((box[1] + box[4]) / 2)
+    z = ((box[2] + box[5]) / 2)
+    return [x, y, z]
+
 class tumbler():
     def __init__(self):
         print 'init'
-        self.time = pm.timerX()
+        self.time = cmds.timerX()
         self.frequency = 0.1667
-        if not pm.optionVar(exists='tumble_enabled'):
-            pm.optionVar(stringValue=('tumble_enabled', 0))
-        ver = pm.about(version=True)
-        '''
-        if ver == '2016':
-            self.units = self.get_units(pm.currentUnit(query=True, linear=True))
-        else:
-            self.units = 100.0
-        pass
-        '''
+        if not pm.optionVar(exists='tumbler_enabled'):
+            pm.optionVar(stringValue=('tumbler_enabled', 'enabled'))
 
     def toggle(self, state, *args):
         print args
 
-    def get_bounding_box_centre(self, objects):
-        box = pm.exactWorldBoundingBox(objects)  #Do standard BB computation
-        x = ((box[0] + box[3]) / 2)
-        y = ((box[1] + box[4]) / 2)
-        z = ((box[2] + box[5]) / 2)
-        return [x, y, z]
+
 
     def reset_tumble(self, *args):
         pivot = [0, 0, 0]
         self.update_tumble_pivots(pivot)
-        all_cameras = pm.ls(dag=True, cameras=True)
+        all_cameras = cmds.ls(dag=True, cameras=True)
         for cam in all_cameras:
             try:
                 # set the tumble pivot of the camera to the coordinates we have calculated before
-                pm.setAttr(cam + ".tumblePivot", pivot[0], pivot[1], pivot[2])
+                cmds.setAttr(cam + ".tumblePivot", pivot[0], pivot[1], pivot[2])
             except Exception as e:
                 print e.message
 
     def update_tumble_pivots(self, pivot):
         # Do the actual tumble pivot setting
-        all_cameras = pm.ls(dag=True, cameras=True)
-        pm.tumbleCtx("tumbleContext", edit=True,
+        all_cameras = cmds.ls(dag=True, cameras=True)
+        cmds.tumbleCtx("tumbleContext", edit=True,
                      localTumble=0)  # Set the tumble tool to honor the cameras tumble pivot
         pivot[0] *= unit_conversion()
         pivot[1] *= unit_conversion()
@@ -56,84 +68,76 @@ class tumbler():
         for cam in all_cameras:
             try:
                 # set the tumble pivot of the camera to the coordinates we have calculated before
-                pm.setAttr(cam + ".tumblePivot", pivot[0], pivot[1], pivot[2])
+                cmds.setAttr(cam + ".tumblePivot", pivot[0], pivot[1], pivot[2])
             except:
-                Warning("Ritalin: Setting camera tumble pivot on " + cam + "failed!")
+                Warning("Setting camera tumble pivot on " + cam + "failed!")
 
     def elapsedTime(self):
-        # print 'last call', self.time + self.frequency, 'current time', pm.timerX()
-        return self.time + self.frequency < pm.timerX()
+        # print 'last call', self.time + self.frequency, 'current time', cmds.timerX()
+        return self.time + self.frequency < cmds.timerX()
 
     @decorator.undoToggle
     def doIt(self, *args):
+        if pm.optionVar['tumble_enabled'] == 'enabled' and self.elapsedTime():
+            self.time = cmds.timerX() # set a new time stamp to prevent spamming
 
-        if pm.optionVar['tumble_enabled'] and self.elapsedTime():
-            self.time = pm.timerX() # set a new time stamp to prevent spamming
-
-            selection = pm.ls(selection=True)
-            bounding_boxes = []
-            current_context = pm.currentCtx()
+            selection = cmds.ls(selection=True)
+            if not selection:
+                return None
+            pivots = []
+            current_context = cmds.currentCtx()
             current_tool = ""
-            if pm.contextInfo(current_context, exists=True):
-                current_tool = pm.contextInfo(current_context, c=True)
+            if cmds.contextInfo(current_context, exists=True):
+                current_tool = cmds.contextInfo(current_context, c=True)
             current_joint = ""
-            # print "current_tool", current_tool, "current_context", current_context
+            print "current_tool", current_tool, "current_context", current_context
             if current_tool == "artAttrSkin":
-                whichTool = pm.artAttrSkinPaintCtx(current_context, query=True, whichTool=True)
+                whichTool = cmds.artAttrSkinPaintCtx(current_context, query=True, whichTool=True)
                 if whichTool == "skinWeights":
                     #print "skinning"
-                    current_joint = pm.PyNode(pm.artAttrSkinPaintCtx(
-                        current_context,
-                        query=True,
-                        influence=True))
+                    current_joint = cmds.artAttrSkinPaintCtx(current_context,
+                                                             query=True,
+                                                             influence=True)
 
-            # only work when you have a seleciton
-            if len(selection) > 0:
-                if current_joint:
-                    bounding_boxes.append(current_joint.rotatePivot)
-                else:
-                    # selection
-                    for obj in selection:
-                        object_type = pm.nodeType(obj)
-                        shape_node = pm.listRelatives(obj, fullPath=True, shapes=True)
-                        # print "object:: ", object_type, shape_node
+            if current_joint:
+                pivots.append(cmds.getAttr(current_joint +'.rotatePivot')[0])
+            else:
+                # selection
+                for obj in selection:
+                    object_type = cmds.nodeType(obj)
+                    shape_node = cmds.listRelatives(obj, fullPath=True, shapes=True)
+                    print "object:: ", object_type, shape_node
 
-                        if shape_node:
-                            shape_type = pm.nodeType(shape_node[0])
+                    if shape_node:
+                        print 'shape node'
+                        shape_type = cmds.nodeType(shape_node[0])
 
-                            if object_type == "transform":
-                                if shape_type:
-                                    #bounding_boxes.append(obj)
-                                    bounding_boxes.append(obj.rotatePivot)
-                                    # print shape_type, "bounding box"
-                                else:
-                                    bounding_boxes.append(obj.rotatePivot)
+                        if object_type == "transform":
+                            if shape_type:
+                                pivots.append(getPivot(obj))
                             else:
-                                bounding_boxes.append(obj)
+                                print 'no shape node'
+                                pivots.append(cmds.getAttr(obj + '.rotatePivot')[0])
                         else:
-                            if object_type == "joint":
-                                # use rotate pivot of joints as they have no bounding box
-                                bounding_boxes.append(obj.rotatePivot)
-                                # print "joint!"
-                            else:
-                                bounding_boxes.append(obj)
-                                # print "something else!"
-
-                # get the centre of the box
-                pivot_centre = self.get_bounding_box_centre(bounding_boxes)
-
-                self.update_tumble_pivots(pivot_centre)
-            # pm.undoInfo(stateWithoutFlush=True)
-
-            '''if len(selection) == 0:
-                pivot = [0, 0, 0]
-                self.update_tumble_pivots(pivot)'''
-
+                            pivots.append(getPivot(obj))
+                    else:
+                        if object_type == "joint":
+                            # use rotate pivot of joints as they have no bounding box
+                            pivots.append(getPivot(obj))
+                            # print "joint!"
+                        else:
+                            pivots.append(getPivot(obj))
+                            print "something else!"
+            print pivots[0]
+            self.update_tumble_pivots(midPoint(pivots))
 
 def updateTumble(*args):
     global cTumbler
+    cTumbler.doIt()
+    '''
     try:
         cTumbler.doIt()
     except Exception as e:
         cTumbler = tumbler()
         cTumbler.doIt()
+    '''

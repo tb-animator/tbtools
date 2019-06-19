@@ -337,7 +337,14 @@ class anim_optionWindow(object):
                                                        top_control=time_drag_options,
                                                        top_form=_manip_form
                                                        )
-
+        tumble_options = tb_UI.checkBox_group().create(label="camera pivot tool",
+                                                       parent=_manip_form,
+                                                       variable='tumbler_enabled',
+                                                       columns=2,
+                                                       optionList=['enabled'],
+                                                       top_control=step_drag_options,
+                                                       top_form=_manip_form
+                                                       )
         tb_UI.FormAttach().attach(_manip_layout, self._form_layout)
 
         pm.setParent(_parent)

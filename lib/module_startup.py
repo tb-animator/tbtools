@@ -37,8 +37,8 @@ class initialise():
 
         # load dag menu edit
         #mutils.executeDeferred('import apps.mayaMod.mayaModLoader as mml;mml.customDagLoader().load()')
-        #mutils.executeDeferred('mel.eval(\'scriptJob -conditionTrue \"SomethingSelected\" updateTumble\')')
-        #mutils.executeDeferred('mel.eval(\'scriptJob -event \"DragRelease\" updateTumble\')')
-        #mutils.executeDeferred('mel.eval(\'scriptJob -event \"ModelPanelSetFocus\" updateTumble\')')
+        mutils.executeDeferred('mel.eval(\'scriptJob -conditionTrue \"SomethingSelected\" updateTumble\')')
+        mutils.executeDeferred('mel.eval(\'scriptJob -event \"DragRelease\" updateTumble\')')
+        mutils.executeDeferred('mel.eval(\'scriptJob -event \"ModelPanelSetFocus\" updateTumble\')')
         #mutils.executeDeferred('mel.eval(\'scriptJob -event \"playbackModeChanged\" updateTumble\')')
         #Om.MSceneMessage.addCallback(6, self.dagLoad)

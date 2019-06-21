@@ -30,6 +30,18 @@ import pymel.core as pm
 
 class playback():
     def __init__(self):
+        self.optionList = ['off', 'serial', 'parallel']
+        self.playbackModeOption = 'playback mode'
+        self.manipulationModeOption = 'manipulation mode'
+        self.defaultPlaybackMode = 'parallel'
+        self.defaultManipulationMode = 'serial'
+
+        if not pm.optionVar(exists=self.playbackModeOption):
+            pm.optionVar(stringValue=(self.playbackModeOption, self.defaultPlaybackMode))
+
+        if not pm.optionVar(exists=self.manipulationModeOption):
+            pm.optionVar(stringValue=(self.manipulationModeOption, self.defaultManipulationMode))
+
         self.playback_state = pm.play(query=True, state=True)
         self.timeline = tl.timeline()
         self.cropped = False
@@ -67,5 +79,8 @@ class playback():
                 pm.setCurrentTime(self.timeline.get_highlighted_range(min=True))
                 self.timeline.set_min(time=self.timeline.get_highlighted_range(min=True))
                 self.timeline.set_max(time=self.timeline.get_highlighted_range(min=True)+self.get_flip_frames())
-
+        print pm.optionVar[self.playbackModeOption], pm.optionVar[self.manipulationModeOption]
+        pm.evaluationManager(mode={False: pm.optionVar[self.playbackModeOption],
+                                   True: pm.optionVar[self.manipulationModeOption]}[self.isPlaying()])
+        print pm.evaluationManager(query=True, mode=True)
         pm.play(state=not self.isPlaying())

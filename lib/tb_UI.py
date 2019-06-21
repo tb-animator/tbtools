@@ -3,7 +3,6 @@ import pymel.core as pm
 import tb_messages as tb_msg
 
 
-
 def intEntered(name, *args):
     pm.optionVar(intValue=(str(name), args[0]))
 
@@ -115,6 +114,104 @@ class positionWidget():
         # return option_Menu
 
 
+class option_group():
+    def __init__(self, columns=3):
+        self.main_layout = pm.formLayout()
+        self.sub_frameLayout = pm.frameLayout(parent=self.main_layout,
+                                              labelVisible=False,
+                                              borderStyle='etchedIn'
+                                              )
+        self.sub_formLayout = pm.formLayout(parent=self.sub_frameLayout)
+        self.layout = None
+        self.label = pm.text(parent=self.main_layout)
+        pm.formLayout(
+            self.main_layout,
+            edit=True,
+            attachForm=[[self.sub_frameLayout, 'top', 24],
+                        [self.sub_frameLayout, 'left', 8],
+                        [self.sub_frameLayout, 'right', 12],
+                        [self.sub_frameLayout, 'bottom', 8]]
+        )
+
+        pm.setParent(self.sub_formLayout)
+        pass
+
+    class optionBox():
+        def _optionCheckBox(self, name="", label="", annotation="", optionVar="", var_list=[]):
+            print 'optionVar', optionVar
+            print 'var list', var_list
+            print 'label', label
+            if not pm.optionVar(exists=optionVar):
+                pm.optionVar(stringValue=(optionVar, var_list[0]))
+
+            _optionMenu = pm.optionMenu(label=label, changeCommand=lambda *args: self.option_pressed(name, args[0]))
+            _optionMenuItems = [pm.menuItem(label=var, parent=_optionMenu) for var in var_list]
+            pm.optionMenu(_optionMenu, edit=True, select=var_list.index(pm.optionVar.get(optionVar))+1)
+            return _optionMenu
+
+        @staticmethod
+        def option_pressed(name, *args):
+            print name, args[0]
+            pm.optionVar(stringValue=(str(name), args[0]))
+
+    def create(self, parent="", label="", columns=3, optionList=[], variable="", positionMenu="", positionLabel="",
+               messageMenu="", top_form="", top_control="", intField="", intFieldLabel=""):
+        pm.formLayout(self.main_layout, edit=True, parent=parent)
+        pm.text(self.label, edit=True, label=label)
+        if positionMenu:
+            offset = 1
+        cLayout = pm.rowLayout(numberOfColumns=3,
+                               adjustableColumn=2,
+                               parent=self.sub_formLayout,
+                               columnAlign=[3, 'right'])
+
+        FormAttach().fill_right(cLayout, self.sub_formLayout)
+        FormAttach().fill_left(cLayout, self.sub_formLayout)
+
+        self.layout = pm.rowColumnLayout(numberOfColumns=columns,
+                                         columnAlign=[1, 'both'],
+                                         parent=cLayout
+                                         )
+        if not isinstance(variable, (list,)):
+            variable = [variable]
+
+        for var in variable:
+            print 'what', optionList
+            self.optionBox()._optionCheckBox(optionVar=var,
+                                             var_list=optionList,
+                                             name=var,
+                                             label=var)
+        '''
+        if intField:
+            pm.text(label=intFieldLabel)
+            pm.intField(parent=self.layout,
+                        width=64,
+                        value=pm.optionVar.get(intField, 2),
+                        changeCommand=lambda *args: intEntered(intField, args[0]))
+        '''
+        # spacer
+        pm.text(label="", parent=cLayout)
+
+        if top_control:
+            pm.formLayout(
+                top_form,
+                edit=True,
+                attachControl=[self.main_layout, 'top', 0, top_control],
+                attachForm=[[self.main_layout, 'left', 8],
+                            [self.main_layout, 'right', 8]]
+            )
+
+        elif top_form:
+            pm.formLayout(
+                top_form,
+                edit=True,
+                attachForm=[[self.main_layout, 'top', 24],
+                            [self.main_layout, 'left', 8],
+                            [self.main_layout, 'right', 8]]
+            )
+        return self.main_layout
+
+
 class checkBox_group():
     def __init__(self, columns=3):
         self.main_layout = pm.formLayout()
@@ -126,12 +223,12 @@ class checkBox_group():
         self.layout = None
         self.label = pm.text(parent=self.main_layout)
         pm.formLayout(
-                self.main_layout,
-                edit=True,
-                attachForm=[[self.sub_frameLayout, 'top', 24],
-                            [self.sub_frameLayout, 'left', 8],
-                            [self.sub_frameLayout, 'right', 12],
-                            [self.sub_frameLayout, 'bottom', 8]]
+            self.main_layout,
+            edit=True,
+            attachForm=[[self.sub_frameLayout, 'top', 24],
+                        [self.sub_frameLayout, 'left', 8],
+                        [self.sub_frameLayout, 'right', 12],
+                        [self.sub_frameLayout, 'bottom', 8]]
         )
 
         pm.setParent(self.sub_formLayout)
@@ -153,7 +250,6 @@ class checkBox_group():
         @staticmethod
         def checkBox_pressed(name, *args):
             pm.optionVar(intValue=(str(name), args[0]))
-
 
         def _optionCheckBox(self, name="", label="", annotation="", variable=""):
             var_list = pm.optionVar.get(variable)
@@ -181,7 +277,6 @@ class checkBox_group():
                 if name in vars:
                     pm.optionVar(removeFromArray=(variable, vars.index(name)))
 
-
     def create(self, parent="", label="", columns=3, optionList=[], variable="", positionMenu="", positionLabel="",
                messageMenu="", top_form="", top_control="", intField="", intFieldLabel=""):
         pm.formLayout(self.main_layout, edit=True, parent=parent)
@@ -200,6 +295,10 @@ class checkBox_group():
                                          columnAlign=[1, 'both'],
                                          parent=cLayout
                                          )
+        '''
+        if not isinstance(variable, (list,)):
+            variable = [variable]
+        '''
         for options in optionList:
             self.cBox()._optionCheckBox(variable=variable,
                                         name=options,
@@ -210,7 +309,6 @@ class checkBox_group():
                         width=64,
                         value=pm.optionVar.get(intField, 2),
                         changeCommand=lambda *args: intEntered(intField, args[0]))
-
 
         # spacer
         pm.text(label="", parent=cLayout)
@@ -245,11 +343,8 @@ class checkBox_group():
                             [self.main_layout, 'left', 8],
                             [self.main_layout, 'right', 8]]
             )
-
-
-
-
         return self.main_layout
+
 
 class FormAttach():
     @staticmethod
@@ -285,13 +380,12 @@ class FormAttach():
 
     @staticmethod
     def stretch_down(attach_form, form):
-        af = [[form, 'bottom', 12 ]]
+        af = [[form, 'bottom', 12]]
         pm.formLayout(
             attach_form,
             edit=True,
             attachForm=af
         )
-
 
     @staticmethod
     def pin_under(attach_form, form_a, form_b):

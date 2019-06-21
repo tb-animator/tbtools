@@ -28,7 +28,7 @@ import tb_UI as tb_UI
 import pymel.core as pm
 from tb_timeDragger import timeDragger
 from tb_manipulators import manips
-
+from tb_playback import playback
 reload(tb_UI)
 
 if not pm.optionVar(exists='playblast_folder'):
@@ -345,6 +345,16 @@ class anim_optionWindow(object):
                                                        top_control=step_drag_options,
                                                        top_form=_manip_form
                                                        )
+        player = playback()
+        playback_options = tb_UI.option_group().create(label="evaluation manager override",
+                                                       parent=_manip_form,
+                                                       variable=[player.playbackModeOption, player.manipulationModeOption],
+                                                       columns=2,
+                                                       optionList=player.optionList,
+                                                       top_control=tumble_options,
+                                                       top_form=_manip_form
+                                                       )
+
         tb_UI.FormAttach().attach(_manip_layout, self._form_layout)
 
         pm.setParent(_parent)

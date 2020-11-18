@@ -22,6 +22,7 @@ __author__ = 'tom.bailey'
 
 *******************************************************************************
 '''
+import os
 import maya.cmds as cmds
 import tb_UI as tb_UI
 import pymel.core as pm
@@ -32,6 +33,9 @@ reload(tb_UI)
 
 if not pm.optionVar(exists='playblast_folder'):
     pm.optionVar(stringValue=('playblast_folder', "c:"))
+
+script_dir = os.path.dirname(__file__) #<-- absolute dir the script is in
+
 
 
 def buttonPressed(name, *args):
@@ -79,12 +83,12 @@ class anim_optionWindow(object):
 
     def __init__(self):
         self.icon_path = ""
-        self.titleImage = "option_top.png"
-        self.titleImage_hvr = "option_top.png"
-        self.reminder_img = "arrow.png"
-        self.curve_btn_img = "curves.png"
-        self.transform_btn_img = "transform.png"
-        self.camera_btn_img = "tb_camera.png"
+        self.titleImage = os.path.join(script_dir, "../Icons/option_top.png")
+        self.titleImage_hvr = os.path.join(script_dir, "../Icons/option_top.png")
+        self.reminder_img = os.path.join(script_dir, "../Icons/arrow.png")
+        self.curve_btn_img = os.path.join(script_dir, "../Icons/curves.png")
+        self.transform_btn_img = os.path.join(script_dir, "../Icons/transform.png")
+        self.camera_btn_img = os.path.join(script_dir, "../Icons/tb_camera.png")
 
         # dictionary for category layouts
         self.categories = {}

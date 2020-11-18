@@ -5,6 +5,7 @@ import pymel.core as pm
 import apps.tb_keyCommands as tb_hotKeys
 import updater as upd
 reload(tb_hotKeys)
+import maya.mel as mel
 
 class initialise():
     def __init__(self):

@@ -34,7 +34,7 @@ reload(tb_UI)
 if not pm.optionVar(exists='playblast_folder'):
     pm.optionVar(stringValue=('playblast_folder', "c:"))
 
-script_dir = os.path.dirname(__file__) #<-- absolute dir the script is in
+script_dir = os.path.dirname(__file__)  # <-- absolute dir the script is in
 
 
 
@@ -89,6 +89,8 @@ class anim_optionWindow(object):
         self.curve_btn_img = os.path.join(script_dir, "../Icons/curves.png")
         self.transform_btn_img = os.path.join(script_dir, "../Icons/transform.png")
         self.camera_btn_img = os.path.join(script_dir, "../Icons/tb_camera.png")
+        self.circle_btn_img = os.path.join(script_dir, "../Icons/circle.png")
+        self.folder_btn_img = os.path.join(script_dir, "../Icons/folder.png")
 
         # dictionary for category layouts
         self.categories = {}
@@ -212,7 +214,7 @@ class anim_optionWindow(object):
                                 )
         return _checkBox
 
-    def _categoryButton(self, name="", width=int(64), height=int(64), icon="circle.png", parent=""):
+    def _categoryButton(self, name="", width=int(64), height=int(64), icon=self.circle_btn_img, parent=""):
         _button = pm.symbolButton(annotation=name,
                                   image=icon,
                                   parent=parent,
@@ -256,7 +258,7 @@ class anim_optionWindow(object):
     def _menu_category(self, _parent):
         self._cat_layout = pm.columnLayout()
         self._cat_form = pm.formLayout()
-        file_option_btn = self._categoryButton(name="file_op", icon='folder.png', parent=self._cat_layout)
+        file_option_btn = self._categoryButton(name="file_op", icon=self.folder_btn_img, parent=self._cat_layout)
         keys_option_btn = self._categoryButton(name="keys_op", icon=self.curve_btn_img, parent=self._cat_layout)
         manips_option_btn = self._categoryButton(name="manips_op", icon=self.transform_btn_img, parent=self._cat_layout)
         # viewport_option_btn = self._categoryButton(name="view_op", icon=self.camera_btn_img, parent=self._cat_layout)

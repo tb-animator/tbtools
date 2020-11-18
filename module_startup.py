@@ -1,15 +1,10 @@
 __author__ = 'Tom'
-import maya.cmds as cmds
 import maya.utils as mutils
-import tb_optionVars as tbo
+import apps.tb_optionVars as tbo
 import pymel.core as pm
-import maya.api.OpenMaya as Om
-import tb_keyCommands as tb_hotKeys
-#import apps.mayaMod.mayaModLoader as mml
+import apps.tb_keyCommands as tb_hotKeys
 import updater as upd
 reload(tb_hotKeys)
-import maya.mel as mel
-
 
 class initialise():
     def __init__(self):
@@ -32,8 +27,8 @@ class initialise():
             pm.optionVar(intValue=('tb_firstRun', 0))
 
         mutils.executeDeferred('import tb_menu as tb_menu;tb_menu.make_ui()')
-        mutils.executeDeferred('import updater as upd;upd.updater().check_version()')
-        mutils.executeDeferred('import tb_graphEditor as ge;ge.graphEditor().add_graph_editor_callback()')
+        #mutils.executeDeferred('import updater as upd;upd.updater().check_version()')
+        #mutils.executeDeferred('import tb_graphEditor as ge;ge.graphEditor().add_graph_editor_callback()')
 
         # load dag menu edit
         #mutils.executeDeferred('import apps.mayaMod.mayaModLoader as mml;mml.customDagLoader().load()')

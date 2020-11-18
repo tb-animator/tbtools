@@ -23,7 +23,6 @@ __author__ = 'tom.bailey'
 *******************************************************************************
 '''
 import maya.cmds as cmds
-import maya.mel as mel
 import tb_UI as tb_UI
 import pymel.core as pm
 from tb_timeDragger import timeDragger
@@ -314,29 +313,29 @@ class anim_optionWindow(object):
                                                        )
 
         time_drag_options = tb_UI.checkBox_group().create(label="smooth drag tool options",
-                                                       parent=_manip_form,
-                                                       variable=timeDragger().optionVar,
-                                                       columns=4,
-                                                       optionList=timeDragger().modes,
-                                                       positionMenu=timeDragger().messagePos,
-                                                       positionLabel="message position",
-                                                       messageMenu=True,
-                                                       top_control=rotate_options,
-                                                       top_form=_manip_form
-                                                       )
+                                                          parent=_manip_form,
+                                                          variable=timeDragger().optionVar,
+                                                          columns=4,
+                                                          optionList=timeDragger().modes,
+                                                          positionMenu=timeDragger().messagePos,
+                                                          positionLabel="message position",
+                                                          messageMenu=True,
+                                                          top_control=rotate_options,
+                                                          top_form=_manip_form
+                                                          )
         step_drag_options = tb_UI.checkBox_group().create(label="step drag tool options",
-                                                       parent=_manip_form,
-                                                       variable=timeDragger().step_optionVar,
-                                                       columns=3,
-                                                       optionList=timeDragger().step_modes,
-                                                       intFieldLabel=timeDragger().step_label,
-                                                       intField=timeDragger().step_var,
-                                                       # positionMenu=timeDragger().messagePos,
-                                                       # positionLabel="message position",
-                                                       # messageMenu=True,
-                                                       top_control=time_drag_options,
-                                                       top_form=_manip_form
-                                                       )
+                                                          parent=_manip_form,
+                                                          variable=timeDragger().step_optionVar,
+                                                          columns=3,
+                                                          optionList=timeDragger().step_modes,
+                                                          intFieldLabel=timeDragger().step_label,
+                                                          intField=timeDragger().step_var,
+                                                          # positionMenu=timeDragger().messagePos,
+                                                          # positionLabel="message position",
+                                                          # messageMenu=True,
+                                                          top_control=time_drag_options,
+                                                          top_form=_manip_form
+                                                          )
         tumble_options = tb_UI.checkBox_group().create(label="camera pivot tool",
                                                        parent=_manip_form,
                                                        variable='tumbler_enabled',
@@ -366,15 +365,15 @@ class anim_optionWindow(object):
         _keys_form = pm.formLayout()
 
         keyframe_options = tb_UI.checkBox_group().create(label="cycle keyframe type options",
-                                                       parent=_keys_form,
-                                                       variable=manips().key_optionVar,
-                                                       columns=4,
-                                                       optionList=manips().key_modes,
-                                                       positionMenu=manips().key_messageVar,
-                                                       positionLabel=manips().key_messageLabel,
-                                                       messageMenu=True,
-                                                       top_form=_keys_form
-                                                       )
+                                                         parent=_keys_form,
+                                                         variable=manips().key_optionVar,
+                                                         columns=4,
+                                                         optionList=manips().key_modes,
+                                                         positionMenu=manips().key_messageVar,
+                                                         positionLabel=manips().key_messageLabel,
+                                                         messageMenu=True,
+                                                         top_form=_keys_form
+                                                         )
 
 
         tb_UI.FormAttach().attach(_keys_layout, self._form_layout)

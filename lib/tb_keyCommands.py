@@ -29,6 +29,7 @@
 import pymel.core as pm
 
 from tb_hkey import tb_hkey
+import apps.tb_pickWalker as tbpw
 
 
 def make_command_list():
@@ -37,10 +38,10 @@ def make_command_list():
     # keyframing tools
     cat = 'tbtools_importExport'
     command_list.append(tb_hkey(name='mocapImporter', annotation='mocap import window',
-                            category=cat, command=['import rig.mocapLinker.mocapImporter as mi',
-                                                   'reload(mi)',
-                                                   'mWindow = mi.mocapWindow(mi.mayaMainWindow())',
-                                                   'mWindow.show()']))
+                                category=cat, command=['import apps.rig.mocapLinker.mocapImporter as mi',
+                                                       'reload(mi)',
+                                                       'mWindow = mi.mocapWindow(mi.mayaMainWindow())',
+                                                       'mWindow.show()']))
     cat = 'tbtools_keyframing'
     command_list.append(tb_hkey(name='flatten_control', annotation='flattens the control out',
                                 category=cat, command=['import tb_flatten as tbf',
@@ -122,7 +123,6 @@ def make_command_list():
                                        'reload(tbkm)',
                                        'tbkm.keyTools().negate_keys(\"right\")']))
 
-
     # camera tools
     cat = 'tbtools_cameras'
 
@@ -158,9 +158,9 @@ def make_command_list():
                                                        'reload (vm)',
                                                        'vm.toggleXrayJoints()']))
     command_list.append(tb_hkey(name='ViewMode_xray', annotation='',
-                            category=cat, command=['import tb_viewModes as vm',
-                                                   'reload (vm)',
-                                                   'vm.toggleXray()']))
+                                category=cat, command=['import tb_viewModes as vm',
+                                                       'reload (vm)',
+                                                       'vm.toggleXray()']))
     command_list.append(tb_hkey(name='ViewMode_Objects_Joints', annotation='',
                                 category=cat, command=['import tb_viewModes as vm',
                                                        'reload (vm)',
@@ -371,32 +371,29 @@ def make_command_list():
                                 category=cat, command=['import tb_selections as tb_sel',
                                                        'reload (tb_sel)',
                                                        'tb_sel.quick_selection().create_qs_set()']))
-    # pickwalk (multi)
-    command_list.append(tb_hkey(name='pickwalk_up', annotation='',
-                                category=cat, command=['from tb_selections import pickwalker',
-                                                       'pickwalker().walk(up=True)']))
-    command_list.append(tb_hkey(name='pickwalk_down', annotation='',
-                                category=cat, command=['from tb_selections import pickwalker',
-                                                       'pickwalker().walk(down=True)']))
-    command_list.append(tb_hkey(name='pickwalk_left', annotation='',
-                                category=cat, command=['from tb_selections import pickwalker',
-                                                       'pickwalker().walk(left=True)']))
-    command_list.append(tb_hkey(name='pickwalk_right', annotation='',
-                                category=cat, command=['from tb_selections import pickwalker',
-                                                       'pickwalker().walk(right=True)']))
-    # pickwalk multi add
-    command_list.append(tb_hkey(name='pickwalk_up_add', annotation='',
-                                category=cat, command=['from tb_selections import pickwalker',
-                                                       'pickwalker().walk(up=True, add=True)']))
-    command_list.append(tb_hkey(name='pickwalk_down_add', annotation='',
-                                category=cat, command=['from tb_selections import pickwalker',
-                                                       'pickwalker().walk(down=True, add=True)']))
-    command_list.append(tb_hkey(name='pickwalk_left_add', annotation='',
-                                category=cat, command=['from tb_selections import pickwalker',
-                                                       'pickwalker().walk(left=True, add=True)']))
-    command_list.append(tb_hkey(name='pickwalk_right_add', annotation='',
-                                category=cat, command=['from tb_selections import pickwalker',
-                                                       'pickwalker().walk(right=True, add=True)']))
+    category = 'tbtools_selection'
+    for key in tbpw.directionsDict.keys():
+        command_list.append(tb_hkey(name='tb_%s' % tbpw.walkDirectionNames[key],
+                                    annotation='smart pickwalker',
+                                    category=category,
+                                    command=['global walker',
+                                             'try:',
+                                             '	walker.walk(direction="%s", add=False)' % key,
+                                             'except:',
+                                             '	from tb_pickWalker import pickwalker',
+                                             '	walker = pickwalker()',
+                                             '	walker.walk(direction="%s", add=False)' % key]))
+        command_list.append(tb_hkey(name='tb_%s_add' % tbpw.walkDirectionNames[key],
+                                    annotation='smart pickwalker',
+                                    category=category,
+                                    command=['global walker',
+                                             'try:',
+                                             '	walker.walk(direction="%s", add=True)' % key,
+                                             'except:',
+                                             '	from tb_pickWalker import pickwalker',
+                                             '	walker = pickwalker()',
+                                             '	walker.walk(direction="%s", add=True)' % key]))
+
     return command_list
 
 
@@ -443,7 +440,6 @@ class hotkey_tool():
         for items in needed_ignore_names:
             pm.optionVar(stringValueAppend=('tb_extra_commands', items))
 
-
     def get_existing_commands(self):
         _commands = []
         existing_commands = pm.runTimeCommand(query=True, userCommandArray=True)
@@ -455,7 +451,6 @@ class hotkey_tool():
                 if pm.runTimeCommand(com, query=True, category=True) in self.categories:
                     _commands.append(com)
             return _commands
-
 
     def remove_bad_commands(self):
         commands_for_deletion = []

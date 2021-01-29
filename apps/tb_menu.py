@@ -18,7 +18,7 @@ class main_menu():
         self.main_menu = pm.menu("TB_tools", label="TB_tools", tearOff=True)
 
         pm.menuItem(label="options",command=open_options, parent=self.main_menu)
-        pm.menuItem(label="download updates (experimental)",command=download_updates, parent=self.main_menu)
+        #pm.menuItem(label="download updates (experimental)",command=download_updates, parent=self.main_menu)
         pm.menuItem(label="about", command=show_aboutWin, parent=self.main_menu)
         pm.menuItem(label="online help", command=open_anim_page, parent=self.main_menu)
 
